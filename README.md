@@ -2,4 +2,4 @@
 Natalija Nikolic 48/20RN
 Vanja Kovinic 42/20RN
 
-* Salon lepote (usluge, zaposleni, termini, zakazivanja, klijenti)
+* Škola jezika (više jezika, grupe, nivoi, sertifikati, polaznici, kursevi)
