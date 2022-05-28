@@ -47,7 +47,7 @@ public class MainFrame extends JFrame implements Subscriber {
         setTitle("Team_86");
 
         Toolkit kit = Toolkit.getDefaultToolkit();
-        Image img = kit.getImage("src/main/resources/icon_86.png");
+        Image img = kit.getImage("src/main/java/images/icon_86.png");
         setIconImage(img);
 
         actionManager = new ActionManager();
