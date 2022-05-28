@@ -1,7 +1,9 @@
 package gui;
 
 import app.AppCore;
+import controller.ActionManager;
 import lombok.Data;
+import lombok.Getter;
 import observer.Notification;
 import observer.Subscriber;
 import tree.implementation.SelectionListener;
@@ -11,15 +13,20 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
 @Data
+@Getter
 public class MainFrame extends JFrame implements Subscriber {
 
     private static MainFrame instance = null;
 
     private AppCore appCore;
+    private ActionManager actionManager;
     private JTable jTable;
     private JScrollPane jsp;
     private JTree jTree;
     private JPanel left;
+    private JPanel center;
+    private JTextPane sqlEditor;
+    private CommandBar commandBar;
 
     private MainFrame() {
 
@@ -37,11 +44,28 @@ public class MainFrame extends JFrame implements Subscriber {
     private void initialise() {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Team_86");
+
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Image img = kit.getImage("src/main/resources/icon_86.png");
+        setIconImage(img);
+
+        actionManager = new ActionManager();
+
+        sqlEditor = new JTextPane();
+        sqlEditor.setPreferredSize(new Dimension(400, 200));
+        commandBar = new CommandBar();
+        center = new JPanel();
+        center.setLayout(new BorderLayout());
+        center.add(commandBar, BorderLayout.NORTH);
+        center.add(sqlEditor, BorderLayout.CENTER);
 
         jTable = new JTable();
-        jTable.setPreferredScrollableViewportSize(new Dimension(500, 400));
+        jTable.setGridColor(new Color(0x3100BC));
+        jTable.setPreferredScrollableViewportSize(new Dimension(700, 200));
         jTable.setFillsViewportHeight(true);
-        this.add(new JScrollPane(jTable));
+        this.add(new JScrollPane(jTable), BorderLayout.SOUTH);
+        this.add(center, BorderLayout.CENTER);
 
         this.pack();
         this.setLocationRelativeTo(null);
@@ -64,6 +88,7 @@ public class MainFrame extends JFrame implements Subscriber {
         jsp = new JScrollPane(jTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
         left = new JPanel(new BorderLayout());
         left.add(jsp, BorderLayout.CENTER);
+        left.setPreferredSize(new Dimension(200, 300));
         add(left, BorderLayout.WEST);
         pack();
     }

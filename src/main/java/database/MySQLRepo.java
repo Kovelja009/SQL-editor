@@ -50,7 +50,7 @@ public class MySQLRepo implements Repository {
             this.initConnection();
 
             DatabaseMetaData metaData = connection.getMetaData();
-            InformationResource ir = new InformationResource("RAF_BP_Primer");
+            InformationResource ir = new InformationResource("team_86");
 
             String tableType[] = {"TABLE"};
             ResultSet tables = metaData.getTables(connection.getCatalog(), null, null, tableType);
