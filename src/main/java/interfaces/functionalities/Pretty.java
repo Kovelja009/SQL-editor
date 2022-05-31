@@ -19,7 +19,6 @@ import javax.swing.text.StyledDocument;
 
 public class Pretty {
     public static List<String> keyWords = new ArrayList<>();
-    public static List<String> specialKeyWrds = new ArrayList<>();
     public static List<Character> characters = new ArrayList<>();
     static boolean listmade = false;
 
@@ -35,18 +34,6 @@ public class Pretty {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        specialKeyWrds.add("SELECT");
-        specialKeyWrds.add("WHERE");
-        specialKeyWrds.add("FROM");
-        specialKeyWrds.add("JOIN");
-        specialKeyWrds.add("RIGHT JOIN");
-        specialKeyWrds.add("LEFT JOIN");
-        specialKeyWrds.add("GROUP BY");
-        specialKeyWrds.add("FULL JOIN");
-        specialKeyWrds.add("FULL OUTER JOIN");
-        specialKeyWrds.add("ORDER BY");
-        specialKeyWrds.add("HAVING");
 
         characters.add(' ');
         characters.add('(');
@@ -73,13 +60,10 @@ public class Pretty {
 
         for(int i = 0; i< text.length(); i++) {
             for (int j = text.length() - 1; j > i; j--) {
-                if (specialKeyWrds.contains(text.substring(i, j).toUpperCase()) && (i == 0 || characters.contains(text.charAt(i-1))) && characters.contains(text.charAt(j)) && !first) {
-                    doc.insertString(doc.getLength(), text.substring(tmpI, i) + "\n", basicStyle);
-                    doc.insertString(doc.getLength(), text.substring(i, j).toUpperCase(), style);
-                    tmpI = j;
-                    i = j;
-                } else if (keyWords.contains(text.substring(i, j).toUpperCase()) && (i == 0 || characters.contains(text.charAt(i-1))) && characters.contains(text.charAt(j))) {
-                    doc.insertString(doc.getLength(),text.substring(tmpI, i), basicStyle);
+                if (keyWords.contains(text.substring(i, j).toUpperCase()) && (i == 0 || characters.contains(text.charAt(i-1))) && characters.contains(text.charAt(j))) {
+                    doc.insertString(doc.getLength(), text.substring(tmpI, i), basicStyle);
+                    if(!first)
+                        doc.insertString(doc.getLength(), "\n", basicStyle);
                     doc.insertString(doc.getLength(), text.substring(i, j).toUpperCase(), style);
                     tmpI = j;
                     i = j;
@@ -99,9 +83,8 @@ public class Pretty {
 //            }
 //            else System.out.print(" " + word);
 //            first = false;
-//        }
-
     }
+
 
     public static List<String> getKeyWords() {
         return keyWords;
@@ -109,14 +92,6 @@ public class Pretty {
 
     public static void setKeyWords(List<String> keyWords) {
         Pretty.keyWords = keyWords;
-    }
-
-    public static List<String> getSpecialKeyWrds() {
-        return specialKeyWrds;
-    }
-
-    public static void setSpecialKeyWrds(List<String> specialKeyWrds) {
-        Pretty.specialKeyWrds = specialKeyWrds;
     }
 
     public static List<Character> getCharacters() {

@@ -1,5 +1,10 @@
 {
     "data": [
+"LEFT JOIN",
+"RIGHT JOIN",
+"FULL OUTER JOIN",
+"ORDER BY",
+"FULL JOIN",
 "A",
 "ABORT",
 "ABS",
