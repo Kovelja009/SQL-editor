@@ -10,13 +10,13 @@ public class CommandBar extends JToolBar {
         setPreferredSize(new Dimension(100, 35));
 
         addSeparator(new Dimension(250,50));
-        add(MainFrame.getInstance().getActionManager().getBulkImport());
+        add(MainFrame.getInstance().getActionManager().getBulkImportBtn());
         addSeparator(new Dimension(5,50));
-        add(MainFrame.getInstance().getActionManager().getPretty());
+        add(MainFrame.getInstance().getActionManager().getPrettyBtn());
         addSeparator(new Dimension(5,50));
-        add(MainFrame.getInstance().getActionManager().getExport());
+        add(MainFrame.getInstance().getActionManager().getExportBtn());
         addSeparator(new Dimension(15,50));
-        add(MainFrame.getInstance().getActionManager().getRun());
+        add(MainFrame.getInstance().getActionManager().getRunBtn());
 
     }
 }

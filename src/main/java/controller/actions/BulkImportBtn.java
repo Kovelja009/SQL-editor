@@ -4,8 +4,8 @@ import controller.AbstractButtonAction;
 
 import java.awt.event.ActionEvent;
 
-public class BulkImport extends AbstractButtonAction {
-    public BulkImport(){
+public class BulkImportBtn extends AbstractButtonAction {
+    public BulkImportBtn(){
         putValue(NAME, "Bulk import");
         putValue(SHORT_DESCRIPTION, "Imports data from .csv file");
     }

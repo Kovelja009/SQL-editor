@@ -1,17 +1,21 @@
 package interfaces.functionalities;
-
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.StandardSocketOptions;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.core.JsonParser;
+import gui.MainFrame;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 public class Pretty {
     public static List<String> keyWords = new ArrayList<>();
@@ -52,30 +56,31 @@ public class Pretty {
         characters.add(';');
     }
 
-
-    public static final String TEXT_RESET = "\u001B[0m";
-    public static final String TEXT_CYAN = "\u001B[36m";
-
-    public static void makePretty(String text){
+    public static void makePretty(String text) throws BadLocationException {
         if(!listmade){
             listmade = true;
             makeKeyWords();
         }
 
-        String tmpString = "";
         int tmpI = 0;
         boolean first = true;
+        StyledDocument doc = MainFrame.getInstance().getSqlEditor().getStyledDocument();
+        Style style = MainFrame.getInstance().getSqlEditor().addStyle("", null);
+        Style basicStyle = MainFrame.getInstance().getSqlEditor().addStyle("", null);
+        StyleConstants.setForeground(style, Color.BLUE);
+        StyleConstants.setForeground(basicStyle, Color.BLACK);
+        MainFrame.getInstance().getSqlEditor().setText("");
+
         for(int i = 0; i< text.length(); i++) {
             for (int j = text.length() - 1; j > i; j--) {
-                if (specialKeyWrds.contains(text.substring(i, j).toUpperCase()) && (i == 0 || characters.contains(text.charAt(i-1))) && characters.contains(text.charAt(j))) {
-                    if (first)
-                        tmpString = tmpString + text.substring(tmpI, i) + TEXT_CYAN + text.substring(i, j).toUpperCase() + TEXT_RESET;
-                    else
-                        tmpString = tmpString + text.substring(tmpI, i) + "\n" + TEXT_CYAN + text.substring(i, j).toUpperCase() + TEXT_RESET;
+                if (specialKeyWrds.contains(text.substring(i, j).toUpperCase()) && (i == 0 || characters.contains(text.charAt(i-1))) && characters.contains(text.charAt(j)) && !first) {
+                    doc.insertString(doc.getLength(), text.substring(tmpI, i) + "\n", basicStyle);
+                    doc.insertString(doc.getLength(), text.substring(i, j).toUpperCase(), style);
                     tmpI = j;
                     i = j;
                 } else if (keyWords.contains(text.substring(i, j).toUpperCase()) && (i == 0 || characters.contains(text.charAt(i-1))) && characters.contains(text.charAt(j))) {
-                    tmpString = tmpString + text.substring(tmpI, i) + TEXT_CYAN + text.substring(i, j).toUpperCase() + TEXT_RESET;
+                    doc.insertString(doc.getLength(),text.substring(tmpI, i), basicStyle);
+                    doc.insertString(doc.getLength(), text.substring(i, j).toUpperCase(), style);
                     tmpI = j;
                     i = j;
                 }
@@ -83,8 +88,7 @@ public class Pretty {
             first = false;
         }
         if(tmpI != text.length())
-            tmpString = tmpString + text.substring(tmpI);
-        System.out.println(tmpString);
+            doc.insertString(doc.getLength(), text.substring(tmpI), basicStyle);
 
 //        String[] words = text.split("[ ();]");
 //        boolean first = true;
@@ -97,5 +101,29 @@ public class Pretty {
 //            first = false;
 //        }
 
+    }
+
+    public static List<String> getKeyWords() {
+        return keyWords;
+    }
+
+    public static void setKeyWords(List<String> keyWords) {
+        Pretty.keyWords = keyWords;
+    }
+
+    public static List<String> getSpecialKeyWrds() {
+        return specialKeyWrds;
+    }
+
+    public static void setSpecialKeyWrds(List<String> specialKeyWrds) {
+        Pretty.specialKeyWrds = specialKeyWrds;
+    }
+
+    public static List<Character> getCharacters() {
+        return characters;
+    }
+
+    public static void setCharacters(List<Character> characters) {
+        Pretty.characters = characters;
     }
 }

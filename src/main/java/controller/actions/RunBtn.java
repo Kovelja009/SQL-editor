@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-public class Run extends AbstractButtonAction {
-    public Run(){
+public class RunBtn extends AbstractButtonAction {
+    public RunBtn(){
         putValue(NAME, "Run");
         putValue(SHORT_DESCRIPTION, "Runs SQL query");
     }
