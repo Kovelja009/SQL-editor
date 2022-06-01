@@ -41,6 +41,7 @@ public class Pretty {
         characters.add(',');
         characters.add(':');
         characters.add(';');
+        characters.add('\n');
     }
 
     public static void makePretty(String text) throws BadLocationException {
@@ -50,7 +51,6 @@ public class Pretty {
         }
 
         int tmpI = 0;
-        boolean first = true;
         StyledDocument doc = MainFrame.getInstance().getSqlEditor().getStyledDocument();
         Style style = MainFrame.getInstance().getSqlEditor().addStyle("", null);
         Style basicStyle = MainFrame.getInstance().getSqlEditor().addStyle("", null);
@@ -58,18 +58,19 @@ public class Pretty {
         StyleConstants.setForeground(basicStyle, Color.BLACK);
         MainFrame.getInstance().getSqlEditor().setText("");
 
+
         for(int i = 0; i< text.length(); i++) {
-            for (int j = text.length() - 1; j > i; j--) {
-                if (keyWords.contains(text.substring(i, j).toUpperCase()) && (i == 0 || characters.contains(text.charAt(i-1))) && characters.contains(text.charAt(j))) {
+            for (int j = text.length(); j > i; j--) {
+                if (keyWords.contains(text.substring(i, j).toUpperCase()) && (i == 0 || characters.contains(text.charAt(i-1))) &&
+                        (j == text.length() || !(text.charAt(j)>64 && text.charAt(j)<91) && !(text.charAt(j)>96 && text.charAt(j)<123))) {
                     doc.insertString(doc.getLength(), text.substring(tmpI, i), basicStyle);
-                    if(!first)
+                    if(i > 0 && text.charAt(i-1) != '\n')
                         doc.insertString(doc.getLength(), "\n", basicStyle);
                     doc.insertString(doc.getLength(), text.substring(i, j).toUpperCase(), style);
                     tmpI = j;
                     i = j;
                 }
             }
-            first = false;
         }
         if(tmpI != text.length())
             doc.insertString(doc.getLength(), text.substring(tmpI), basicStyle);
