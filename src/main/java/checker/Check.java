@@ -25,7 +25,7 @@ public class Check {
             if(!r.checkRule(data))
                 stack.add(r);
         }
-        System.out.println("prosao check check stack je empty: " + stack.isEmpty());
+        System.out.println("prosao check stack je empty: " + stack.isEmpty());
         return stack.isEmpty();
     }
     public void addRule(AbstractRule rule) {

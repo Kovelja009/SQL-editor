@@ -1,7 +1,7 @@
 [	{
         "name": "bulkrule01",
-        "error": "1 error %s",
-        "suggestion": "1 suggestion %s"
+        "error": "[!] Error: Columns [%1] doesn`t exist in table %2",
+        "suggestion": "[?] Suggestion: check for csv with columns [%1]"
     }, 
     {
         "name": "rule02",

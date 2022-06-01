@@ -3,10 +3,12 @@ package checker;
 import checker.rules.AbstractRule;
 import checker.rules.RuleFactory;
 import controller.actions.Task;
+import gui.MainFrame;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import javax.swing.*;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,6 @@ public class Checker {
             newRule.setName(name);
             newRule.setError(error);
             newRule.setSuggestion(suggestion);
-            System.out.println(name + " " + error +" " + suggestion);
             if(name.contains("bulk"))
                 bulkCheck.addRule(newRule);
             else
@@ -68,8 +69,10 @@ public class Checker {
     }
 
     public void makeStackTrace(Check check){
-        //TODO
+        String stackTrace = "";
         for(AbstractRule r : check.getStack())
-            System.out.println("name: " + r.getName());
+            stackTrace += r.getErrorMsg() + "\n" + r.getSuggestionMsg();
+
+        JOptionPane.showMessageDialog(MainFrame.getInstance(), stackTrace, "", JOptionPane.ERROR_MESSAGE);
     }
 }

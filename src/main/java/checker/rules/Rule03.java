@@ -5,4 +5,9 @@ public class Rule03 extends AbstractRule{
     public boolean checkRule(Object data) {
         return false;
     }
+
+    @Override
+    public void generateErrorSuggestion(Object data) {
+
+    }
 }

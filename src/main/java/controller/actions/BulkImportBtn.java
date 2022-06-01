@@ -48,7 +48,6 @@ public class BulkImportBtn extends AbstractButtonAction {
                 exception.printStackTrace();
             }
         }
-        System.out.println("BuLk iMpoRT");
     }
 
     private ImportData createImportData(FileReader in, TreeItem<DBNode> ti) throws Exception{
