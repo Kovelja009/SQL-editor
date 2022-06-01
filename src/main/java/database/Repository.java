@@ -9,4 +9,6 @@ public interface Repository {
     DBNode getSchema();
 
     List<Row> get(String from);
+
+    boolean insert(String table, List<String> columns, List<List<String>> rows);
 }

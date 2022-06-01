@@ -1,6 +1,7 @@
 package controller.actions;
 
 import controller.AbstractButtonAction;
+import gui.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ public class RunBtn extends AbstractButtonAction {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        System.out.println("RUnNiNg");
+        MainFrame.getInstance().getAppCore().checkAndRunTask(Task.RUN, "Select * from lolcina");
+
     }
 }

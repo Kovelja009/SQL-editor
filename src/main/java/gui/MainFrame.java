@@ -50,6 +50,10 @@ public class MainFrame extends JFrame implements Subscriber {
         Image img = kit.getImage("src/main/java/images/icon_86.png");
         setIconImage(img);
 
+        ///////////////////////////////////////////////////////////////////
+        String text;
+
+        //////////////////////////////////////////////////////////////////
         actionManager = new ActionManager();
 
         sqlEditor = new JTextPane();

@@ -1,6 +1,7 @@
 package controller.actions;
 
 import controller.AbstractButtonAction;
+import gui.MainFrame;
 
 import java.awt.event.ActionEvent;
 
@@ -12,7 +13,6 @@ public class ExportBtn extends AbstractButtonAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        System.out.println("ExpoRTinG");
+        MainFrame.getInstance().getAppCore().runTask(Task.EXPORT, MainFrame.getInstance().getAppCore().getTableModel().getRows());
     }
 }

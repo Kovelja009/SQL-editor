@@ -154,4 +154,45 @@ public class MySQLRepo implements Repository {
 
         return rows;
     }
+
+    @Override
+    public boolean insert(String table, List<String> columns, List<List<String>> rows) {
+        try{
+            this.initConnection();
+            String query="INSERT INTO "+table+"(";
+            for (String column:columns) {
+                query = query.concat(column);
+                query = query.concat(",");
+            }
+            query = query.substring(0,query.length()-1);
+            query=query.concat(")");
+            query=query.concat(" VALUES ");
+            for(List<String> row:rows) {
+                String pom = "(";
+                for (int i = 0; i < row.size() - 1; i++) {
+                    pom=pom.concat("");
+                    pom = pom.concat(row.get(i));
+                    pom = pom.concat(",");
+                }
+                pom=pom.concat(""+row.get(row.size()-1));
+                pom=pom.concat("), ");
+                query=query.concat(pom);
+            }
+            query = query.substring(0,query.length()-2);
+            query=query.concat(";");
+            System.out.println(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            return preparedStatement.execute();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            System.out.println("UGASIO KONEKCIJU");
+            this.closeConnection();
+        }
+
+        return false;
+    }
 }

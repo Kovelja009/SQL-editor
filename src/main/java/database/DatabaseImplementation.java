@@ -23,4 +23,9 @@ public class DatabaseImplementation implements Database{
     public List<Row> readDataFromTable(String tableName) {
         return repository.get(tableName);
     }
+
+    @Override
+    public boolean insertIntoTable(String table, List<String> columns, List<List<String>> rows) {
+        return  repository.insert(table,columns,rows);
+    }
 }
