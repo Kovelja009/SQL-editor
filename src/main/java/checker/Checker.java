@@ -36,8 +36,13 @@ public class Checker {
         {
             JSONObject rule = (JSONObject) r;
             String name = (String) rule.get("name");
+            String error = (String) rule.get("error");
+            String suggestion = (String) rule.get("suggestion");
             AbstractRule newRule = RuleFactory.getRule(name);
             newRule.setName(name);
+            newRule.setError(error);
+            newRule.setSuggestion(suggestion);
+            System.out.println(name + " " + error +" " + suggestion);
             if(name.contains("bulk"))
                 bulkCheck.addRule(newRule);
             else

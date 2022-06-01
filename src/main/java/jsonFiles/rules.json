@@ -1,14 +1,17 @@
 [	{
         "name": "bulkrule01",
-        "att": "1"
+        "error": "1 error %s",
+        "suggestion": "1 suggestion %s"
     }, 
     {
         "name": "rule02",
-        "att": "2"
+        "error": "2 error",
+        "suggestion": "2 suggestion"
     }, 
     {
         "name": "rule03",
-        "att": "3"
+        "error": "3 error",
+        "suggestion": "3 suggestion"
     }
 
 ]

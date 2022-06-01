@@ -2,6 +2,7 @@ package gui;
 
 import app.AppCore;
 import controller.ActionManager;
+import gui.other.CommandBar;
 import lombok.Data;
 import lombok.Getter;
 import observer.Notification;

@@ -42,37 +42,36 @@ public class BulkImportBtn extends AbstractButtonAction {
         if(jfc.showOpenDialog(MainFrame.getInstance())==JFileChooser.APPROVE_OPTION){
             try {
                 in = new FileReader(jfc.getSelectedFile());
-               //////////////////////////////////////////////////////////////
-                List<String> columns = new ArrayList<>();
-                List<List<String>> rows = new ArrayList<>();
-                Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(in);
-                CSVRecord firstRow= records.iterator().next();
-                for(int i=0;i<firstRow.size();i++)
-                    columns.add(firstRow.get(i));
-                while(records.iterator().hasNext())
-                {
-                    List<String> tmp = new ArrayList<>();
-                    CSVRecord row = records.iterator().next();
-                    for(int i=0;i<row.size();i++){
-                        if(row.get(i).equalsIgnoreCase(""))
-                            tmp.add("NULL");
-                        else
-                            tmp.add("\""+row.get(i)+"\"");
-                    }
-                    rows.add(tmp);
-                    System.out.println(row+" "+ row.size());
-                }
-                //////////////////////////////////////////////////////////////
-                ImportData importData = new ImportData((Entity) ti.getDbNode(),columns, rows);
-                //////////////////////////////////////////////////////////////
                 // provera i izrvsavanje se desava ovde
-                MainFrame.getInstance().getAppCore().checkAndRunTask(Task.IMPORT, importData);
+                MainFrame.getInstance().getAppCore().checkAndRunTask(Task.IMPORT, createImportData(in, ti));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-        }else{
-            System.out.println("Must select file!");
         }
         System.out.println("BuLk iMpoRT");
+    }
+
+    private ImportData createImportData(FileReader in, TreeItem<DBNode> ti) throws Exception{
+
+        List<String> columns = new ArrayList<>();
+        List<List<String>> rows = new ArrayList<>();
+        Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(in);
+        CSVRecord firstRow= records.iterator().next();
+        for(int i=0;i<firstRow.size();i++)
+            columns.add(firstRow.get(i));
+        while(records.iterator().hasNext())
+        {
+            List<String> tmp = new ArrayList<>();
+            CSVRecord row = records.iterator().next();
+            for(int i=0;i<row.size();i++){
+                if(row.get(i).equalsIgnoreCase(""))
+                    tmp.add("NULL");
+                else
+                    tmp.add("\""+row.get(i)+"\"");
+            }
+            rows.add(tmp);
+            ImportData importData = new ImportData((Entity) ti.getDbNode(),columns, rows);
+        }
+        return new ImportData((Entity) ti.getDbNode(),columns, rows);
     }
 }
