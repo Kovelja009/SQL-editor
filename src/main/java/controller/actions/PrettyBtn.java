@@ -2,7 +2,6 @@ package controller.actions;
 
 import controller.AbstractButtonAction;
 import gui.MainFrame;
-import interfaces.functionalities.Pretty;
 import lombok.SneakyThrows;
 
 import javax.swing.text.Style;
@@ -21,6 +20,6 @@ public class PrettyBtn extends AbstractButtonAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         String str = MainFrame.getInstance().getSqlEditor().getText();
-        Pretty.makePretty(str);
+        MainFrame.getInstance().getAppCore().runTask(Task.PRETTY, str);
     }
 }

@@ -73,7 +73,7 @@ public class MySQLRepo implements Repository {
                     String columnName = columns.getString("COLUMN_NAME");
                     String columnType = columns.getString("TYPE_NAME");
 
-                    System.out.println(columnType);
+//                    System.out.println(columnType);
 
                     int columnSize = Integer.parseInt(columns.getString("COLUMN_SIZE"));
 

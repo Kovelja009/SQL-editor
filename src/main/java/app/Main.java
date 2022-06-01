@@ -1,7 +1,6 @@
 package app;
 
 import gui.MainFrame;
-import interfaces.functionalities.Pretty;
 
 public class Main {
     public static void main(String[] args) {
