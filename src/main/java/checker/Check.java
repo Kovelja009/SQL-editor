@@ -1,7 +1,6 @@
 package checker;
 
-import checker.rules.AbstractRule;
-import gui.MainFrame;
+import checker.rules.neon.AbstractRule;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,7 +1,7 @@
 package checker;
 
-import checker.rules.AbstractRule;
-import checker.rules.RuleFactory;
+import checker.rules.neon.AbstractRule;
+import checker.rules.neon.RuleFactory;
 import controller.actions.Task;
 import gui.MainFrame;
 import org.json.simple.JSONArray;
@@ -10,11 +10,9 @@ import org.json.simple.parser.JSONParser;
 
 import javax.swing.*;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Checker {
-    private List<AbstractRule> stack = new ArrayList<>();
     private Check bulkCheck;
     private Check runCheck;
 
@@ -52,7 +50,6 @@ public class Checker {
     }
 
     public boolean check(Task task, Object data){
-        stack.clear();
         boolean passed = true;
         if(task.equals(Task.IMPORT)){
             passed = bulkCheck.check(data);
@@ -71,8 +68,7 @@ public class Checker {
     public void makeStackTrace(Check check){
         String stackTrace = "";
         for(AbstractRule r : check.getStack())
-            stackTrace += r.getErrorMsg() + "\n" + r.getSuggestionMsg();
-
+            stackTrace += "<html><font color=\"red\">" + r.getErrorMsg() + "</font></html>"  + "\n" + "<html><font color=\"purple\">" + r.getSuggestionMsg() + "</font></html>" + "\n";
         JOptionPane.showMessageDialog(MainFrame.getInstance(), stackTrace, "", JOptionPane.ERROR_MESSAGE);
     }
 }

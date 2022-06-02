@@ -1,17 +1,52 @@
-[	{
-        "name": "bulkrule01",
-        "error": "[!] Error: Columns [%1] doesn`t exist in table %2",
-        "suggestion": "[?] Suggestion: check for csv with columns [%1]"
-    }, 
+[
     {
-        "name": "rule02",
-        "error": "2 error",
-        "suggestion": "2 suggestion"
-    }, 
+      "name": "rule01",
+      "error": "1 error",
+      "suggestion": "1 suggestion"
+    },
     {
-        "name": "rule03",
-        "error": "3 error",
-        "suggestion": "3 suggestion"
+      "name": "rule02",
+      "error": "2 error",
+      "suggestion": "2 suggestion"
+    },
+    {
+      "name": "rule03",
+      "error": "3 error",
+      "suggestion": "3 suggestion"
+    },
+    {
+      "name": "rule04",
+      "error": "4 error",
+      "suggestion": "4 suggestion"
+    },
+    {
+      "name": "rule05",
+      "error": "5 error",
+      "suggestion": "5 suggestion"
+    },
+    {
+      "name": "rule06",
+      "error": "6 error",
+      "suggestion": "6 suggestion"
+    },
+    {
+      "name": "rule07",
+      "error": "7 error",
+      "suggestion": "7 suggestion"
+    },
+    {
+      "name": "rule08",
+      "error": "8 error",
+      "suggestion": "8 suggestion"
+    },
+    {
+      "name": "rule09",
+      "error": "9 error",
+      "suggestion": "9 suggestion"
+    },
+    {
+      "name": "bulkrule10",
+      "error": "[!] Error: Columns [%1] don`t exist in table %2",
+      "suggestion": "[?] Suggestion: check for csv with columns [%1]"
     }
-
 ]
