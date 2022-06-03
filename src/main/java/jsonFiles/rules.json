@@ -16,8 +16,8 @@
     },
     {
       "name": "rule04",
-      "error": "4 error",
-      "suggestion": "4 suggestion"
+      "error": "Query is missing %1",
+      "suggestion": "Insert %1 into query"
     },
     {
       "name": "rule05",
