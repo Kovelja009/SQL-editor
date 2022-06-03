@@ -77,6 +77,7 @@ public class Keywords {
         characters.add(':');
         characters.add(';');
         characters.add('\n');
+        characters.add('\r');
     }
 
     public List<String> getKeyWords() {

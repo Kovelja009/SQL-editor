@@ -34,7 +34,8 @@ public class PrettyExecute implements Execute {
             for(int i = 0; i< text.length(); i++) {
                 for (int j = text.length(); j > i; j--) {
                     if (keyWords.contains(text.substring(i, j).toUpperCase()) && (i == 0 || characters.contains(text.charAt(i-1))) &&
-                            (j == text.length() || !(text.charAt(j)>64 && text.charAt(j)<91) && !(text.charAt(j)>96 && text.charAt(j)<123))) {
+                            (j == text.length() || characters.contains(text.charAt(j)))) {
+                        //!(text.charAt(j)>64 && text.charAt(j)<91) && !(text.charAt(j)>96 && text.charAt(j)<123))
                         doc.insertString(doc.getLength(), text.substring(tmpI, i), basicStyle);
                         if(i > 0 && text.charAt(i-1) != '\n')
                             doc.insertString(doc.getLength(), "\n", basicStyle);

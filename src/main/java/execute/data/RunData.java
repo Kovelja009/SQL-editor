@@ -35,7 +35,10 @@ public class RunData {
             if(!tmp.equals("") && !isSubquery){
                 if(!queryText.substring(start, i).equals("")){
                     String keyword = keyCheck(queryText, start);
-                    String subtext = queryText.substring(start + keyword.length() + 1, i-1);
+
+                    String subtext = "";
+                    if(!(start + keyword.length() + 1 > i-1))
+                        subtext = queryText.substring(start + keyword.length() + 1, i-1);
                     Statement statement = new Statement(keyword, subtext, Keywords.getInstance().getPriority(keyword));
                     statementList.add(statement);
                 }
@@ -44,7 +47,9 @@ public class RunData {
         }
         if(!queryText.substring(start, queryText.length()-1).equals("")){
             String keyword = keyCheck(queryText, start);
-            String subtext = queryText.substring(start + keyword.length() + 1);
+            String subtext = "";
+            if((start + keyword.length() + 1 < queryText.length()))
+                subtext = queryText.substring(start + keyword.length() + 1);
             Statement statement = new Statement(keyword, subtext, Keywords.getInstance().getPriority(keyword));
             statementList.add(statement);
         }
@@ -55,7 +60,7 @@ public class RunData {
 
     private String trimming(String queryText){
         for(int i = queryText.length()-1; i >=0; i--){
-            if(queryText.substring(i).equalsIgnoreCase(" "))
+            if(queryText.substring(i).equalsIgnoreCase(" ") ||queryText.substring(i).equalsIgnoreCase("\n"))
                 queryText = queryText.substring(0, i);
             else break;
         }

@@ -11,8 +11,8 @@
     },
     {
       "name": "rule03",
-      "error": "3 error",
-      "suggestion": "3 suggestion"
+      "error": "%1 can`t go before %2",
+      "suggestion": "set %1 before %2"
     },
     {
       "name": "rule04",
