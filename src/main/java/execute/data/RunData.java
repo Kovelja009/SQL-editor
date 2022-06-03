@@ -1,11 +1,11 @@
 package execute.data;
 
+import gui.MainFrame;
 import lombok.Getter;
+import resources.enums.AttributeType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public class RunData {
@@ -13,13 +13,35 @@ public class RunData {
     private List<Statement> statementList;
     //          alias, table
     private Map<String, String> aliasMap;
+    private Map<String, AttributeType> variables;
+    boolean isProcedure = false;
+    boolean isDeclare = false;
+    List<Character> chars;
+
 
     public RunData(String queryText){
         queryText = trimming(queryText);
+
         this.queryText = queryText;
         statementList = new ArrayList<>();
         aliasMap = new HashMap<>();
+        variables = new HashMap<>();
         buildStatements();
+        checkProcedure(queryText);
+        chars = new ArrayList<>();
+        chars.add('\n');
+        chars.add('\r');
+        chars.add(' ');
+
+        if(isProcedure)
+            parseProcedure(queryText);
+
+        if(isDeclare)
+            parseDeclare(queryText);
+
+        for(Map.Entry<String, AttributeType> entry : variables.entrySet())
+            System.out.println("key: " + entry.getKey() + " values: " + entry.getValue());
+
     }
 
     private void buildStatements(){
@@ -45,6 +67,9 @@ public class RunData {
                 start = i;
             }
         }
+
+        if(queryText.length() == 0)
+            return;
         if(!queryText.substring(start, queryText.length()-1).equals("")){
             String keyword = keyCheck(queryText, start);
             String subtext = "";
@@ -54,13 +79,14 @@ public class RunData {
             statementList.add(statement);
         }
 
-        for(Statement statement : statementList)
-            System.out.println(statement);
+//        for(Statement statement : statementList)
+//            System.out.println(statement);
     }
 
     private String trimming(String queryText){
+        queryText = queryText.replaceAll("\r", " ");
         for(int i = queryText.length()-1; i >=0; i--){
-            if(queryText.substring(i).equalsIgnoreCase(" ") ||queryText.substring(i).equalsIgnoreCase("\n"))
+            if(queryText.substring(i).equalsIgnoreCase(" ") || queryText.substring(i).equalsIgnoreCase("\n"))
                 queryText = queryText.substring(0, i);
             else break;
         }
@@ -69,10 +95,16 @@ public class RunData {
         queryText = queryText.replaceAll("  ", " ");
         queryText = queryText.replaceAll("   ", " ");
         queryText = queryText.replaceAll("  ", " ");
-        queryText = queryText.replaceAll(";", "");
+//        queryText = queryText.replaceAll(";", " ");
 
+
+        if(queryText.length() == 0){
+            System.out.println("prazan");
+            return "";
+        }
         while(queryText.substring(0,1).equalsIgnoreCase(" "))
             queryText = queryText.substring(1);
+
         return queryText;
     }
 
@@ -90,6 +122,150 @@ public class RunData {
             return tmp.equalsIgnoreCase(word);
         }
         return false;
+    }
+
+    private void checkProcedure(String s){
+        List<String> procFun = new ArrayList<>();
+        procFun.add("procedure");
+        procFun.add("function");
+
+        String[] tokens = s.split(" ");
+        for(String token : tokens){
+            if( procFun.contains(token.toLowerCase()))
+                isProcedure = true;
+            if(token.toLowerCase().equalsIgnoreCase("declare"))
+                isDeclare = true;
+        }
+    }
+
+    private void parseProcedure(String text){
+        int zagrada = 0;
+
+        String data = "";
+        boolean first = true;
+        int start = 0;
+        int end = 0;
+        for(int i = 0; i < text.length(); i++){
+            if(text.charAt(i) == '('){
+                if(first){
+                    start = i + 1;
+                    first = false;
+                }
+                zagrada++;
+            }
+            if(text.charAt(i) == ')'){
+                zagrada--;
+                if(zagrada == 0){
+                    end = i;
+                    break;
+                }
+            }
+        }
+        extrapolateData(text.substring(start, end), ",");
+
+        int startAs = 0;
+        int endAs = 0;
+        for(int i = 0; i< text.length() - 7; i++){
+            if(text.substring(i, i+2).equalsIgnoreCase("as") && (i==0 || chars.contains(text.charAt(i-1))) && chars.contains(text.charAt(i+2))){
+                startAs = i+2;
+            }
+            if(text.substring(i,i+5).equalsIgnoreCase("begin") && (i==0 || chars.contains(text.charAt(i-1))) && chars.contains(text.charAt(i+5))){
+                endAs = i;
+            }
+        }
+
+        extrapolateData(text.substring(startAs, endAs), ";");
+
+//        System.out.println("////////////////////////////");
+//        System.out.println(text.substring(startAs, endAs));
+
+//        System.out.println("////////////////////////////");
+
+    }
+
+    private void parseDeclare(String text){
+        int start = 0;
+        int end = 0;
+        for(int i = 0; i< text.length() - 10; i++){
+            if(text.substring(i, i+7).equalsIgnoreCase("declare") && (i==0 || chars.contains(text.charAt(i-1))) && chars.contains(text.charAt(i+7))){
+                start = i+7;
+            }
+            if(text.substring(i,i+5).equalsIgnoreCase("begin") && (i==0 || chars.contains(text.charAt(i-1))) && chars.contains(text.charAt(i+5))){
+                end = i;
+            }
+        }
+        extrapolateData(text.substring(start, end), ";");
+
+    }
+
+    private String clear_data(String data){
+        for(int i = data.length()-1; i >=0; i--){
+            if(data.substring(i).equalsIgnoreCase(" ") || data.substring(i).equalsIgnoreCase("\n"))
+                data = data.substring(0, i);
+            else break;
+        }
+
+        while(data.length() > 0 && data.substring(0,1).equalsIgnoreCase(" "))
+            data = data.substring(1);
+
+        return data;
+    }
+
+    private AttributeType table_extra(String table){
+        String[] tokens = table.split("\\.");
+        String tbl = "";
+        String att = "";
+
+        if(tokens.length == 3){
+            tbl = tokens[1];
+            att = tokens[2];
+        }
+        if(tokens.length == 2){
+            tbl = tokens[0];
+            att = tokens[1];
+        }
+        return MainFrame.getInstance().getAppCore().getDatabase().getAttributeType(tbl, att);
+    }
+
+    private AttributeType getAttType(String type){
+        if(type.contains("%type")){
+            int end = type.indexOf("%type");
+            String table = type.substring(0, end);
+//            System.out.println(type.substring(0, end));
+            return table_extra(table);
+        }else{
+            String tmp = "";
+            for(int i = 0; i < type.length(); i++){
+                if(type.charAt(i) == '(' || type.charAt(i) == ')' ||(type.charAt(i) >= '0' && type.charAt(i) <= '9'))
+                    continue;
+                tmp += String.valueOf(type.charAt(i));
+            }
+            type = tmp;
+            return AttributeType.valueOf(
+                    Arrays.stream(type.toUpperCase().split(" "))
+                            .collect(Collectors.joining("_")));
+
+        }
+    }
+
+    void extrapolateData(String data, String regex){
+        String[] tokens = data.split(regex);
+
+        for(String token : tokens){
+            token = clear_data(token);
+            System.out.println("[" + token + "]");
+            String[] words = token.split(" ");
+            String variable = words[0];
+            if(words.length == 2)
+                variables.put(variable, getAttType(words[1]));
+            if(words.length == 3)
+                variables.put(variable, getAttType(words[2]));
+            if(words.length > 3)
+                variables.put(variable, getAttType(words[1]));
+        }
+//        for(Map.Entry<String, AttributeType> entry : variables.entrySet()){
+//            System.out.println("var: " + entry.getKey() + " type: " + entry.getValue());
+//        }
     }
 
 //    private void buildAliasMapKeys(String text, boolean isSelect){

@@ -9,7 +9,8 @@ public class Rule04 extends AbstractRule {
     @Override
     public boolean checkRule(Object data) {
         RunData runData = (RunData) data;
-//        Query q = (Query) data;
+        if(runData.isProcedure())
+            return true;
         boolean noSelect = true;
         for(Statement statement : runData.getStatementList()){
             if(statement.getKeyword().equalsIgnoreCase("select")){

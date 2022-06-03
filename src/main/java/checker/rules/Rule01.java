@@ -9,6 +9,9 @@ public class Rule01 extends AbstractRule {
     public boolean checkRule(Object data) {
         RunData runData = (RunData) data;
 
+        if(runData.isProcedure())
+            return true;
+
         for(Statement statement : runData.getStatementList()){
             checkStatement(statement);
         }

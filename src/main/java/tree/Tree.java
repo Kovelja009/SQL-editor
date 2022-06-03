@@ -8,4 +8,6 @@ public interface Tree {
 
     DefaultTreeModel generateTree(InformationResource informationResource);
 
+
+
 }

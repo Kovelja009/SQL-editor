@@ -18,5 +18,6 @@ public enum AttributeType {
     INT_UNSIGNED,
     IMAGE,
     SMALLINT,
+    NUMBER,
     NVARCHAR
 }

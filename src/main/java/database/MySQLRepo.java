@@ -195,4 +195,51 @@ public class MySQLRepo implements Repository {
 
         return false;
     }
+
+    @Override
+    public AttributeType getAttributeType(String table11, String column11) {
+        try{
+            this.initConnection();
+
+            DatabaseMetaData metaData = connection.getMetaData();
+            InformationResource ir = new InformationResource("team_86");
+
+            String tableType[] = {"TABLE"};
+            ResultSet tables = metaData.getTables(connection.getCatalog(), null, null, tableType);
+
+            while (tables.next()){
+
+                String tableName = tables.getString("TABLE_NAME");
+                if(tableName.contains("trace"))continue;
+                Entity newTable = new Entity(tableName, ir);
+                ir.addChild(newTable);
+
+                ResultSet columns = metaData.getColumns(connection.getCatalog(), null, tableName, null);
+
+                while (columns.next()){
+
+                    // COLUMN_NAME TYPE_NAME COLUMN_SIZE ....
+
+                    String columnName = columns.getString("COLUMN_NAME");
+                    String columnType = columns.getString("TYPE_NAME");
+
+
+                    int columnSize = Integer.parseInt(columns.getString("COLUMN_SIZE"));
+
+                    if(columnName.equalsIgnoreCase(column11) && tableName.equalsIgnoreCase(table11)){
+                        return AttributeType.valueOf(
+                                Arrays.stream(columnType.toUpperCase().split(" "))
+                                        .collect(Collectors.joining("_")));
+                    }
+                }
+
+            }
+        }
+        catch (SQLException | ClassNotFoundException e1) {
+            e1.printStackTrace();
+        } finally {
+            this.closeConnection();
+        }
+        return null;
+    }
 }

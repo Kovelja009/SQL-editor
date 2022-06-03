@@ -13,6 +13,9 @@ public class Rule03 extends AbstractRule {
     public boolean checkRule(Object data) {
         RunData runData = (RunData) data;
 
+        if(runData.isProcedure())
+            return true;
+
         boolean isOk = true;
         for(int i = 1; i < runData.getStatementList().size(); i++){
             if(runData.getStatementList().get(i).getPriority() <= runData.getStatementList().get(i-1).getPriority()){
