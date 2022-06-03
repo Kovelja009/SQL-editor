@@ -4,10 +4,6 @@ import controller.AbstractButtonAction;
 import gui.MainFrame;
 import lombok.SneakyThrows;
 
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class PrettyBtn extends AbstractButtonAction {

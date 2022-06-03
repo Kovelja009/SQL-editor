@@ -13,6 +13,6 @@ public class Statement {
 
     @Override
     public String toString() {
-        return " keyword: " + keyword + " text: " + text + " priority: " + priority;
+        return "keyword: " + keyword + " text: " + text + " priority: " + priority;
     }
 }

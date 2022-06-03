@@ -3,7 +3,6 @@ package execute.data;
 import lombok.Getter;
 import resources.implementation.Entity;
 
-import java.io.FileReader;
 import java.util.List;
 
 @Getter

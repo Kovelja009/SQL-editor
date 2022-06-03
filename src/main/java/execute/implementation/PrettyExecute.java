@@ -1,20 +1,13 @@
 package execute.implementation;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import execute.Execute;
+import execute.data.Keywords;
 import gui.MainFrame;
 
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PrettyExecute implements Execute {
@@ -22,27 +15,8 @@ public class PrettyExecute implements Execute {
     public static List<Character> characters;
 
     public PrettyExecute(){
-        keyWords = new ArrayList<>();
-        characters = new ArrayList<>();
-        makeKeyWords();
-    }
-
-    void makeKeyWords(){
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            ObjectNode node = (ObjectNode)mapper.readTree(new File("src\\main\\java\\jsonFiles\\keywords.json"));
-            JsonNode arrayNode = node.get("data");
-            keyWords = mapper.readValue(arrayNode.traverse(), new TypeReference<ArrayList<String>>(){});
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        characters.add(' ');
-        characters.add('(');
-        characters.add(')');
-        characters.add(',');
-        characters.add(':');
-        characters.add(';');
-        characters.add('\n');
+        keyWords = Keywords.getInstance().getKeyWords();
+        characters = Keywords.getInstance().getCharacters();
     }
 
     @Override
