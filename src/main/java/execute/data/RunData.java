@@ -2,6 +2,7 @@ package execute.data;
 
 import gui.MainFrame;
 import lombok.Getter;
+import org.apache.commons.lang3.tuple.MutablePair;
 import resources.enums.AttributeType;
 
 import java.util.*;
@@ -268,6 +269,56 @@ public class RunData {
 //        for(Map.Entry<String, AttributeType> entry : variables.entrySet()){
 //            System.out.println("var: " + entry.getKey() + " type: " + entry.getValue());
 //        }
+    }
+
+    public List<String> getGroupByArguments(String body){
+        String[] splitted = body.split(",");
+        List<String> res = new ArrayList<>();
+        for(String s:splitted){
+            if(!s.strip().equals(""))
+                res.add(s.strip());
+        }
+        return res;
+    }
+
+    public List<MutablePair<String,String>> getSelectArguments(String body){
+
+        List<MutablePair<String, String>> arguments = new ArrayList<>();
+        String[] splitted = body.split(",");
+        for(String s:splitted)
+        {
+            s = s.strip();
+            if(s.contains(" as "))
+            {
+                int ind=s.indexOf(" as ");
+                String arg = stripOfFunction(s.substring(0,ind).strip());
+                arguments.add(new MutablePair<>(arg,s.substring(ind+4)));
+            }
+            else if(s.contains(" "))
+            {
+                int ind=s.indexOf(" ");
+                String arg = stripOfFunction(s.substring(0,ind).strip());
+                arguments.add(new MutablePair<>(arg,s.substring(ind+1)));
+            }
+            else{
+                String arg = stripOfFunction(s);
+                arguments.add(new MutablePair<>(arg,null));
+            }
+        }
+        System.out.println("SELECT ARGUMENTS"+ arguments);
+        return arguments;
+    }
+
+    public String stripOfFunction(String txt){
+
+        for(String fun : Keywords.getInstance().getAggregateFunctions()){
+            if(txt.indexOf(fun) == 0){
+                int start = txt.indexOf("(") + 1;
+                int end = txt.indexOf(")");
+                return txt.substring(start,end);
+            }
+        }
+        return txt;
     }
 
 

@@ -26,8 +26,8 @@
     },
     {
       "name": "rule06",
-      "error": "6 error",
-      "suggestion": "6 suggestion"
+      "error": "SELECT has aggregate function for column %1, GROUP BY statement doesn`t have that column",
+      "suggestion": "Remove column %1 from SELECT, or add it to GROUP BY"
     },
     {
       "name": "rule07",

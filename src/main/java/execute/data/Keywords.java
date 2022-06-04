@@ -20,7 +20,7 @@ public class Keywords {
     private List<String> keyWords;
     private List<Character> characters;
     private List<Character> specialCharacters;
-    private static String[] aggregateFunctions = new String[]{"min", "max", "avg", "count", "sum"};
+    private List<String> aggregateFunctions = new ArrayList<>();
 
     private Keywords(){
         keywords = new TreeMap<>();
@@ -45,6 +45,12 @@ public class Keywords {
         specialCharacters.add('>');
         specialCharacters.add('<');
         specialCharacters.add('*');
+
+        aggregateFunctions.add("min");
+        aggregateFunctions.add("max");
+        aggregateFunctions.add("avg");
+        aggregateFunctions.add("count");
+        aggregateFunctions.add("sum");
 
 
         keyWords = new ArrayList<>();
