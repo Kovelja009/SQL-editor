@@ -41,8 +41,8 @@
     },
     {
       "name": "rule09",
-      "error": "9 error",
-      "suggestion": "9 suggestion"
+      "error": "You have unused variables %1",
+      "suggestion": "Remove variables %1"
     },
     {
       "name": "bulkrule10",

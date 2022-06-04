@@ -16,7 +16,6 @@ public class RunData {
     private Map<String, AttributeType> variables;
     boolean isProcedure = false;
     boolean isDeclare = false;
-    List<Character> chars;
 
 
     public RunData(String queryText){
@@ -28,10 +27,6 @@ public class RunData {
         variables = new HashMap<>();
         buildStatements();
         checkProcedure(queryText);
-        chars = new ArrayList<>();
-        chars.add('\n');
-        chars.add('\r');
-        chars.add(' ');
 
         if(isProcedure)
             parseProcedure(queryText);
@@ -166,10 +161,10 @@ public class RunData {
         int startAs = 0;
         int endAs = 0;
         for(int i = 0; i< text.length() - 7; i++){
-            if(text.substring(i, i+2).equalsIgnoreCase("as") && (i==0 || chars.contains(text.charAt(i-1))) && chars.contains(text.charAt(i+2))){
+            if(text.substring(i, i+2).equalsIgnoreCase("as") && (i==0 || Keywords.getInstance().getCharacters().contains(text.charAt(i-1))) && Keywords.getInstance().getCharacters().contains(text.charAt(i+2))){
                 startAs = i+2;
             }
-            if(text.substring(i,i+5).equalsIgnoreCase("begin") && (i==0 || chars.contains(text.charAt(i-1))) && chars.contains(text.charAt(i+5))){
+            if(text.substring(i,i+5).equalsIgnoreCase("begin") && (i==0 || Keywords.getInstance().getCharacters().contains(text.charAt(i-1))) && Keywords.getInstance().getCharacters().contains(text.charAt(i+5))){
                 endAs = i;
             }
         }
@@ -187,10 +182,10 @@ public class RunData {
         int start = 0;
         int end = 0;
         for(int i = 0; i< text.length() - 10; i++){
-            if(text.substring(i, i+7).equalsIgnoreCase("declare") && (i==0 || chars.contains(text.charAt(i-1))) && chars.contains(text.charAt(i+7))){
+            if(text.substring(i, i+7).equalsIgnoreCase("declare") && (i==0 || Keywords.getInstance().getCharacters().contains(text.charAt(i-1))) && Keywords.getInstance().getCharacters().contains(text.charAt(i+7))){
                 start = i+7;
             }
-            if(text.substring(i,i+5).equalsIgnoreCase("begin") && (i==0 || chars.contains(text.charAt(i-1))) && chars.contains(text.charAt(i+5))){
+            if(text.substring(i,i+5).equalsIgnoreCase("begin") && (i==0 || Keywords.getInstance().getCharacters().contains(text.charAt(i-1))) && Keywords.getInstance().getCharacters().contains(text.charAt(i+5))){
                 end = i;
             }
         }
@@ -268,7 +263,8 @@ public class RunData {
 //        }
     }
 
-//    private void buildAliasMapKeys(String text, boolean isSelect){
+
+    //    private void buildAliasMapKeys(String text, boolean isSelect){
 //        if(!isSelect){
 //            System.out.println("''''''''''''''''''''''''''''''''''");
 //            String[] data = text.split(" ");
