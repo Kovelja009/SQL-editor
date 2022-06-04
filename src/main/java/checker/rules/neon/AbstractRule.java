@@ -15,8 +15,8 @@ public abstract class AbstractRule {
 
     //TODO set checkRUle and generateErrorSuggestion to abstract
     public  boolean checkRule(Object data){
-        generateErrorSuggestion(null);
-        return false;
+//        generateErrorSuggestion(null);
+        return true;
     }
     public void generateErrorSuggestion(Object data){
      errorMsg = error;

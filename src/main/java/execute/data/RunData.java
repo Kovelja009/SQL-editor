@@ -34,8 +34,10 @@ public class RunData {
         if(isDeclare)
             parseDeclare(queryText);
 
-        for(Map.Entry<String, AttributeType> entry : variables.entrySet())
-            System.out.println("key: " + entry.getKey() + " values: " + entry.getValue());
+        if(!variables.isEmpty()){
+            for(Map.Entry<String, AttributeType> entry : variables.entrySet())
+                System.out.println("key: " + entry.getKey() + " values: " + entry.getValue());
+        }
 
     }
 
@@ -171,10 +173,12 @@ public class RunData {
 
         extrapolateData(text.substring(startAs, endAs), ";");
 
-//        System.out.println("////////////////////////////");
+        System.out.println("////////////////////////////");
 //        System.out.println(text.substring(startAs, endAs));
+        for(Map.Entry<String, AttributeType> entry : variables.entrySet())
+            System.out.println(entry.getKey() + " " + entry.getValue());
 
-//        System.out.println("////////////////////////////");
+        System.out.println("////////////////////////////");
 
     }
 

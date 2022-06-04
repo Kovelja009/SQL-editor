@@ -21,8 +21,10 @@ public class Check {
     public boolean check(Object data){
         stack.clear();
         for(AbstractRule r : rules){
-            if(!r.checkRule(data))
+            if(!r.checkRule(data)){
                 stack.add(r);
+                break;
+            }
         }
         System.out.println("prosao check stack je empty: " + stack.isEmpty());
         return stack.isEmpty();

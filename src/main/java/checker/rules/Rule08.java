@@ -6,10 +6,7 @@ import execute.data.RunData;
 import gui.MainFrame;
 import resources.enums.AttributeType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Rule08 extends AbstractRule {
     @Override
@@ -17,6 +14,7 @@ public class Rule08 extends AbstractRule {
 
         RunData runData = (RunData) data;
         String text = runData.getQueryText();
+
 
         int start = 0;
         int end = 0;
@@ -30,9 +28,9 @@ public class Rule08 extends AbstractRule {
             }
         }
         String tmpText = text.substring(start, end);
-        System.out.println("111111111111111111111111111111111111111111");
-        System.out.println(tmpText);
-        System.out.println("111111111111111111111111111111111111111111");
+//        System.out.println("111111111111111111111111111111111111111111");
+//        System.out.println(tmpText);
+//        System.out.println("111111111111111111111111111111111111111111");
         String[] intoSplit = tmpText.split("into");
         if(intoSplit.length < 2){
             System.out.println("intoSplit error");
@@ -77,8 +75,9 @@ public class Rule08 extends AbstractRule {
 //        System.out.println(tmpDesni);
 
         int size = Integer.min(tmpDesni.size(), tmpLevi.size());
-
+//        System.out.println(runData.getVariables().keySet() + " <- entry set");
         for(int i = 0; i < size; i++){
+//            System.out.println("levi: " + tmpLevi.get(i) + getAtribute(tmpLevi.get(i)) + " desni: " + tmpDesni.get(i) + runData.getVariables().get(tmpDesni.get(i)));
             if(!provera(getAtribute(tmpLevi.get(i)), runData.getVariables().get(tmpDesni.get(i)))){
                 System.out.println("usao za rec " + tmpLevi.get(i)+" "+tmpDesni.get(i));
                 List<String> lista = new ArrayList<>();
@@ -87,11 +86,13 @@ public class Rule08 extends AbstractRule {
                 generateErrorSuggestion(lista);
                 return false;
             }
+            runData.getVariables().remove(tmpDesni.get(i));
         }
 
-        System.out.println("prosao type check");
+//        System.out.println("prosao type check");
 
-        return true;
+        return poslednjaProvera(tmpText,runData.getVariables(), runData);
+
     }
 
     private boolean provera(AttributeType levi, AttributeType desni){
@@ -99,7 +100,37 @@ public class Rule08 extends AbstractRule {
         || levi.equals(AttributeType.DECIMAL) || levi.equals(AttributeType.INT) || levi.equals(AttributeType.DECIMAL_UNSIGNED)||
         levi.equals(AttributeType.INT_UNSIGNED) || levi.equals(AttributeType.SMALLINT)))
             return true;
+        if(levi == null || desni == null)
+            return false;
         return levi.equals(desni);
+    }
+
+    private boolean poslednjaProvera(String text, Map<String, AttributeType> variables, RunData runData){
+        if(variables.isEmpty())
+            return true;
+
+        String[] tokens = text.split("[ ,;:()]");
+//        System.out.println("Tokeni:");
+        for(String token : tokens){
+            if(token.equals(""))
+                continue;
+            if(variables.containsKey(token)){
+                if(Arrays.stream(tokens).toList().indexOf(token) - 2 >= 0){
+                        if(!provera(getAtribute(tokens[Arrays.stream(tokens).toList().indexOf(token) - 2]), runData.getVariables().get(token))){
+                            List<String> data = new ArrayList<>();
+                            data.add(tokens[Arrays.stream(tokens).toList().indexOf(token) - 2]);
+                            data.add(token);
+                            generateErrorSuggestion(data);
+                            return false;
+                        }
+                        runData.getVariables().remove(token);
+//                    provera token i token - 2
+//                    izbacivanje tokena
+                }
+            }
+//            System.out.println(token);
+        }
+        return true;
     }
 
     private AttributeType getAtribute(String column){

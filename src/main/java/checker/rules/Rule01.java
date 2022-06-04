@@ -21,9 +21,6 @@ public class Rule01 extends AbstractRule {
     }
 
     private boolean checkStatement(Statement statement){
-        
-
-
         return false;
     }
 

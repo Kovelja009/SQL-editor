@@ -35,14 +35,14 @@
       "suggestion": "7 suggestion"
     },
     {
+      "name": "rule09",
+      "error": "You have unused variables [%1]",
+      "suggestion": "Remove variables [%1]"
+    },
+    {
       "name": "rule08",
       "error": "%1 and %2 are not of same type",
       "suggestion": "Change type of %1"
-    },
-    {
-      "name": "rule09",
-      "error": "You have unused variables %1",
-      "suggestion": "Remove variables %1"
     },
     {
       "name": "bulkrule10",

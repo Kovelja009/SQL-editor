@@ -5,6 +5,7 @@ import execute.data.Keywords;
 import execute.data.RunData;
 import resources.enums.AttributeType;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,7 +18,10 @@ public class Rule09 extends AbstractRule {
         if (!runData.isDeclare() && !runData.isProcedure())
             return true;
 
-        Map<String, AttributeType> var = runData.getVariables();
+        Map<String, AttributeType> var = new HashMap<>();
+        for(Map.Entry<String, AttributeType> entry : runData.getVariables().entrySet()){
+            var.put(entry.getKey(), entry.getValue());
+        }
 
         String text = runData.getQueryText();
         int start = 0;
