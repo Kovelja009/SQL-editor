@@ -16,7 +16,6 @@ public class Rule01 extends AbstractRule {
             checkStatement(statement);
         }
 
-        generateErrorSuggestion(runData);
         return true;
     }
 

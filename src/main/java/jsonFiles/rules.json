@@ -21,8 +21,8 @@
     },
     {
       "name": "rule05",
-      "error": "5 error",
-      "suggestion": "5 suggestion"
+      "error": "Alias %1 doesn`t have quotation marks",
+      "suggestion": "Add quotation marks"
     },
     {
       "name": "rule06",

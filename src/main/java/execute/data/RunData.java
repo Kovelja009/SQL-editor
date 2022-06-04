@@ -3,6 +3,7 @@ package execute.data;
 import gui.MainFrame;
 import lombok.Getter;
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.MutableTriple;
 import resources.enums.AttributeType;
 
 import java.util.*;
@@ -307,6 +308,52 @@ public class RunData {
         }
         System.out.println("SELECT ARGUMENTS"+ arguments);
         return arguments;
+    }
+
+    public List<MutablePair<String,String>> getFromArguments(String body){
+        return getSelectArguments(body);
+    }
+
+    public List<MutableTriple<String,String,String>> getJoinArguments(String body){
+
+        List<MutableTriple<String,String,String>> arguments = new ArrayList<>();
+
+        if(body.contains(" on "))
+        {
+            int ind=body.indexOf(" on ");
+            int ind2=body.indexOf("=");
+            arguments.add(new MutableTriple<>(body.substring(body.toLowerCase().indexOf(" join ")+6,ind).strip(),body.substring(ind+4, ind2).strip(),body.substring(ind2+1).strip()));
+        }
+        else if(body.contains(" using("))
+        {
+            int ind=body.indexOf(" using(");
+            String key = body.substring(ind+7).replace(')',' ').strip();
+            arguments.add(new MutableTriple<>(body.substring(0,ind).strip(), key,key));
+        }
+        return arguments;
+    }
+
+    public String getAli(String s){
+        if(s.contains(" as "))
+        {
+            int ind=s.indexOf(" as ");
+            String arg = stripOfFunction(s.substring(0,ind).strip());
+            return s.substring(ind+4);
+        }
+        else if(s.contains(" "))
+        {
+            int ind=s.indexOf(" ");
+            return s.substring(ind+1);
+        }
+        else
+            return "";
+    }
+
+    public String getDotAli(String txt){
+        String[] tokens = txt.split("\\.");
+        if(tokens.length < 2)
+            return "";
+        return tokens[0];
     }
 
     public String stripOfFunction(String txt){

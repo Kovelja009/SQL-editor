@@ -21,21 +21,18 @@ public class Rule07 extends AbstractRule {
         if(txt.equals(""))
             return true;
 
-
         String[] tokens = txt.split("[ :;=,><]");
 
         for (String token : tokens){
+            if(token.equals(""))
+                continue;
             if(Keywords.getInstance().isAggreateFunction(token)){
                 generateErrorSuggestion(token.substring(0, 3));
                 return false;
             }
-//            System.out.println(token + " is agregate-> " + Keywords.getInstance().isAggreateFunction(token));
         }
-        //////////////////////////////////////////////////////////////
-//        ako je sve proslo
-        setErrorMsg("");
-        setSuggestionMsg("Return rule07 to true - everything else is fine");
-        return false;
+
+        return true;
     }
 
     @Override

@@ -15,7 +15,6 @@ public abstract class AbstractRule {
 
     //TODO set checkRUle and generateErrorSuggestion to abstract
     public  boolean checkRule(Object data){
-//        generateErrorSuggestion(null);
         return true;
     }
     public void generateErrorSuggestion(Object data){
@@ -29,6 +28,6 @@ public abstract class AbstractRule {
 
     @Override
     public String toString() {
-        return name + " " + error + " " + suggestion;
+        return name;
     }
 }

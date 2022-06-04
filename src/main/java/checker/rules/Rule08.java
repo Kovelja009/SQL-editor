@@ -13,8 +13,11 @@ public class Rule08 extends AbstractRule {
     public boolean checkRule(Object data) {
 
         RunData runData = (RunData) data;
-        String text = runData.getQueryText();
 
+        if (!runData.isDeclare() && !runData.isProcedure())
+            return true;
+
+        String text = runData.getQueryText();
 
         int start = 0;
         int end = 0;

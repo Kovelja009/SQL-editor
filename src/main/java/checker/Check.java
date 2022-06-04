@@ -26,7 +26,7 @@ public class Check {
                 break;
             }
         }
-        System.out.println("prosao check stack je empty: " + stack.isEmpty());
+        System.out.println("prosao check stack je empty: " + stack.isEmpty() + ", a na stack-u su pravila: " + stack);
         return stack.isEmpty();
     }
     public void addRule(AbstractRule rule) {
