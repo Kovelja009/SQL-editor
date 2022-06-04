@@ -31,8 +31,8 @@
     },
     {
       "name": "rule07",
-      "error": "7 error",
-      "suggestion": "7 suggestion"
+      "error": "Function %1 can`t be in where statement",
+      "suggestion": "Remove %1"
     },
     {
       "name": "rule09",

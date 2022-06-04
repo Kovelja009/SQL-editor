@@ -20,6 +20,7 @@ public class Keywords {
     private List<String> keyWords;
     private List<Character> characters;
     private List<Character> specialCharacters;
+    private static String[] aggregateFunctions = new String[]{"min", "max", "avg", "count", "sum"};
 
     private Keywords(){
         keywords = new TreeMap<>();
@@ -93,5 +94,37 @@ public class Keywords {
 
     public Map<Integer, String> getKeywords() {
         return keywords;
+    }
+
+    public boolean isAggreateFunction(String s) {
+        s = s.strip();
+
+        int depth = 0;
+        for(int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) =='(') depth++;
+            if(s.charAt(i) == ')') depth--;
+            for(String func: aggregateFunctions) {
+                int len = func.length();
+                if(depth == 0 && s.substring(i, Math.min(s.length(), i+len)).equalsIgnoreCase(func) && okPreviousChar(s, i) && okNextChar(s, i+len)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean okPreviousChar(String s, int pos) {
+        return pos - 1 < 0 || s.charAt(pos-1) == ' ' || s.charAt(pos-1) == '\n' || !Character.isLetterOrDigit(s.charAt(pos-1));
+    }
+
+    private static boolean okNextChar(String s, int pos) {
+        while(pos < s.length()) {
+            if(s.charAt(pos) == '(')
+                return true;
+            if(s.charAt(pos) != ' ')
+                return false;
+            pos++;
+        }
+        return false;
     }
 }
