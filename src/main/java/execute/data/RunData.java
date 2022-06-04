@@ -39,6 +39,9 @@ public class RunData {
                 System.out.println("key: " + entry.getKey() + " values: " + entry.getValue());
         }
 
+        for(Statement statement : statementList)
+            System.out.println(statement);
+
     }
 
     private void buildStatements(){

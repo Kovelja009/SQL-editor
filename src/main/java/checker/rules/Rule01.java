@@ -17,7 +17,7 @@ public class Rule01 extends AbstractRule {
         }
 
         generateErrorSuggestion(runData);
-        return false;
+        return true;
     }
 
     private boolean checkStatement(Statement statement){

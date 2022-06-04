@@ -30,6 +30,13 @@ public class Keywords {
         keywords.put(5, "having");
         keywords.put(6, "order by");
 
+        keywords.put(-2, "update");
+        keywords.put(-1, "set");
+        keywords.put(-4, "insert");
+        keywords.put(-3, "into");
+        keywords.put(-5, "delete");
+        keywords.put(-6, "exec");
+
         specialCharacters = new ArrayList<>();
         specialCharacters.add('=');
         specialCharacters.add('(');

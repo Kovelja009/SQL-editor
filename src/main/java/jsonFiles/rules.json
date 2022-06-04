@@ -10,14 +10,14 @@
       "suggestion": "2 suggestion"
     },
     {
-      "name": "rule03",
-      "error": "%1 can`t go before %2",
-      "suggestion": "set %1 before %2"
-    },
-    {
       "name": "rule04",
       "error": "Query is missing %1",
       "suggestion": "Insert %1 into query"
+    },
+    {
+      "name": "rule03",
+      "error": "%1 can`t go before %2",
+      "suggestion": "set %1 before %2"
     },
     {
       "name": "rule05",

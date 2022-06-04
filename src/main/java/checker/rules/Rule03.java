@@ -6,8 +6,8 @@ import execute.data.Statement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
+// rule03 and rule04 are swapped
 public class Rule03 extends AbstractRule {
     @Override
     public boolean checkRule(Object data) {
@@ -28,7 +28,7 @@ public class Rule03 extends AbstractRule {
         }
 
         for(Statement statement : runData.getStatementList()){
-            if(!statement.getKeyword().equalsIgnoreCase("from") && statement.getText().contains("join")){
+            if(!statement.getKeyword().equalsIgnoreCase("from") && statement.getText().contains(" join ")){
                 List<String> dt = new ArrayList<>();
                 dt.add("join");
                 generateErrorSuggestion(dt);
