@@ -14,8 +14,13 @@ import lombok.Setter;
 import observer.Notification;
 import observer.enums.NotificationCode;
 import observer.implementation.PublisherImplementation;
+import resources.DBNode;
+import resources.DBNodeComposite;
+import resources.enums.AttributeType;
+import resources.implementation.Attribute;
 import resources.implementation.InformationResource;
 import tree.Tree;
+import tree.TreeItem;
 import tree.implementation.TreeImplementation;
 import utils.Constants;
 
@@ -53,7 +58,8 @@ public class AppCore extends PublisherImplementation {
 
     public DefaultTreeModel loadResource(){
         InformationResource ir = (InformationResource) this.database.loadResource();
-        return this.tree.generateTree(ir);
+        this.defaultTreeModel = this.tree.generateTree(ir);
+        return this.defaultTreeModel;
     }
 
     public void readDataFromTable(String fromTable){
@@ -72,5 +78,34 @@ public class AppCore extends PublisherImplementation {
 
     public void runTask(Task task,Object data){
         executeManager.getExecute(task).execute(data);
+    }
+
+    public boolean existInDatabase(String table, String column)
+    {
+        System.out.println("EXIS CHECK " + table+" "+column);
+        if(column.equals("*"))
+            return true;
+        InformationResource ir = (InformationResource) ((TreeItem)defaultTreeModel.getRoot()).getDbNode();
+        for(DBNode e: ir.getChildren())
+            if(table==null || e.getName().equals(table))
+            {
+                for(DBNode c: ((DBNodeComposite)e).getChildren())
+                    if(c.getName().equals(column))
+                        return true;
+            }
+        return false;
+    }
+
+    public AttributeType attributeType(String column)
+    {
+
+        InformationResource ir = (InformationResource) ((TreeItem)defaultTreeModel.getRoot()).getDbNode();
+        for(DBNode e: ir.getChildren())
+        {
+            for(DBNode c: ((DBNodeComposite)e).getChildren())
+                if(c.getName().equals(column))
+                    return ((Attribute)c).getAttributeType();
+        }
+        return null;
     }
 }
