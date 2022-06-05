@@ -1,8 +1,8 @@
 [
     {
       "name": "rule01",
-      "error": "1 error",
-      "suggestion": "1 suggestion"
+      "error": "%1 doesn`t exist in database",
+      "suggestion": "Try something else"
     },
     {
       "name": "rule02",

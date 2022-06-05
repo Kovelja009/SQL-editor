@@ -8,6 +8,7 @@ import database.MySQLRepo;
 import database.settings.Settings;
 import database.settings.SettingsImplementation;
 import execute.ExecuteManager;
+import execute.data.Keywords;
 import gui.table.TableModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -82,18 +83,34 @@ public class AppCore extends PublisherImplementation {
 
     public boolean existInDatabase(String table, String column)
     {
-        System.out.println("EXIS CHECK " + table+" "+column);
-        if(column.equals("*"))
+        if(column!=null)
+            column = stripOfFunction(column);
+        System.out.println("EXIST CHECK " + table+" "+column);
+        if(column != null && column.equals("*"))
             return true;
         InformationResource ir = (InformationResource) ((TreeItem)defaultTreeModel.getRoot()).getDbNode();
         for(DBNode e: ir.getChildren())
             if(table==null || e.getName().equals(table))
             {
+                if(column==null)
+                    return true;
                 for(DBNode c: ((DBNodeComposite)e).getChildren())
                     if(c.getName().equals(column))
                         return true;
             }
         return false;
+    }
+
+    public String stripOfFunction(String txt){
+
+        for(String fun : Keywords.getInstance().getAggregateFunctions()){
+            if(txt.indexOf(fun) == 0){
+                int start = txt.indexOf("(") + 1;
+                int end = txt.indexOf(")");
+                return txt.substring(start,end);
+            }
+        }
+        return txt;
     }
 
     public AttributeType attributeType(String column)

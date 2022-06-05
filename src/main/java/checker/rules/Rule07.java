@@ -12,6 +12,9 @@ public class Rule07 extends AbstractRule {
 
         RunData runData = (RunData) data;
 
+        if(runData.isDeclare() || runData.isProcedure())
+            return true;
+
         String txt = "";
         for(Statement statement : runData.getStatementList()){
             if(statement.getKeyword().equalsIgnoreCase("where")){

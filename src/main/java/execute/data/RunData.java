@@ -310,8 +310,44 @@ public class RunData {
         return arguments;
     }
 
-    public List<MutablePair<String,String>> getFromArguments(String body){
-        return getSelectArguments(body);
+    public List<MutablePair<String,String>> getSelectAgreArguments(String body){
+
+        List<MutablePair<String, String>> arguments = new ArrayList<>();
+        String[] splitted = body.split(",");
+        for(String s:splitted)
+        {
+            s = s.strip();
+            if(s.contains(" as "))
+            {
+                int ind=s.indexOf(" as ");
+                arguments.add(new MutablePair<>(s.substring(0,ind).strip(),s.substring(ind+4)));
+            }
+            else if(s.contains(" "))
+            {
+                int ind=s.indexOf(" ");
+                arguments.add(new MutablePair<>(s.substring(0,ind).strip(),s.substring(ind+1)));
+            }
+            else
+                arguments.add(new MutablePair<>(s,null));
+        }
+        return arguments;
+    }
+
+    public MutablePair<String,String> getFromArguments(String body){
+            String s = body;
+            s = s.strip();
+            if(s.contains(" as "))
+            {
+                int ind=s.indexOf(" as ");
+                return new MutablePair<>(s.substring(0,ind).strip(),s.substring(ind+4));
+            }
+            else if(s.contains(" "))
+            {
+                int ind=s.indexOf(" ");
+                return new MutablePair<>(s.substring(0,ind).strip(),s.substring(ind+1));
+            }
+            else
+                return new MutablePair<>(s,null);
     }
 
     public List<MutableTriple<String,String,String>> getJoinArguments(String body){

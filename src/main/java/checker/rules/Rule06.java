@@ -16,6 +16,9 @@ public class Rule06 extends AbstractRule {
     public boolean checkRule(Object data) {
         RunData runData = (RunData) data;
 
+        if(runData.isProcedure() || runData.isDeclare())
+            return true;
+
         String selectTxt = "";
         String groupByTxt = "";
         for(Statement statement : runData.getStatementList()){
@@ -32,7 +35,7 @@ public class Rule06 extends AbstractRule {
             return true;
 
         List<String> groupByArguments = runData.getGroupByArguments(groupByTxt);
-        List<MutablePair<String, String>> selectArguments = runData.getSelectArguments(selectTxt);
+        List<MutablePair<String, String>> selectArguments = runData.getSelectAgreArguments(selectTxt);
 
         for(MutablePair<String, String> par : selectArguments) {
             if(Keywords.getInstance().isAggreateFunction(par.getLeft()))

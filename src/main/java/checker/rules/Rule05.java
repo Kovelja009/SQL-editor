@@ -6,6 +6,7 @@ import execute.data.Statement;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -14,6 +15,9 @@ public class Rule05 extends AbstractRule {
     @Override
     public boolean checkRule(Object data) {
         RunData runData = (RunData) data;
+
+        if(runData.isProcedure() || runData.isDeclare())
+            return true;
 
         for(Statement stat : runData.getStatementList()){
             if(stat.getKeyword().equalsIgnoreCase("select")){
@@ -24,7 +28,9 @@ public class Rule05 extends AbstractRule {
                 }
             }
             if(stat.getKeyword().equalsIgnoreCase("from") && !stat.getText().toLowerCase().contains(" join ")){
-                String wrongAlias = wrongAlias(runData.getFromArguments(stat.getText()));
+                List<MutablePair<String, String>> lst = new ArrayList<>();
+                lst.add(runData.getFromArguments(stat.getText()));
+                String wrongAlias = wrongAlias(lst);
                 if(!wrongAlias.equals("")){
                     generateErrorSuggestion(wrongAlias);
                     return false;
