@@ -75,7 +75,6 @@ public class Rule02 extends AbstractRule {
                     return false;
                 }
             }
-
         }
 
         return true;
@@ -105,9 +104,6 @@ public class Rule02 extends AbstractRule {
 
     @Override
     public void generateErrorSuggestion(Object data) {
-//        return new MutablePair<>(errors[0].replaceFirst("%s",column1).replaceFirst("%s",table)
-//                .replaceFirst("%s",column2).replaceFirst("%s",joinTable),
-//                suggestions[0].replace("%s",column1));
         List<String> l = (List<String>) data;
         String err = getError().replaceFirst("%s",l.get(0)).replaceFirst("%s", l.get(1)).replaceFirst("%s", l.get(2)).replaceFirst("%s", l.get(3));
         setErrorMsg(err);

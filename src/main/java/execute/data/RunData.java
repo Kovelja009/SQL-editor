@@ -18,9 +18,11 @@ public class RunData {
     private Map<String, AttributeType> variables;
     boolean isProcedure = false;
     boolean isDeclare = false;
+    public String rawQuery = "";
 
 
     public RunData(String queryText){
+        rawQuery = queryText;
         queryText = trimming(queryText);
 
         this.queryText = queryText;
@@ -249,11 +251,18 @@ public class RunData {
         return str;
     }
 
+    public boolean getOthr(String query){
+        if(query.contains("update") || query.contains("set")
+                || query.contains("insert") || query.contains("into")
+                || query.contains("delete") || query.contains("exec"))
+            return true;
+        return false;
+    }
+
     private AttributeType getAttType(String type){
         if(type.contains("%type")){
             int end = type.indexOf("%type");
             String table = type.substring(0, end);
-//            System.out.println(type.substring(0, end));
             return table_extra(table);
         }else{
             String tmp = "";

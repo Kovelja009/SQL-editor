@@ -10,6 +10,7 @@ import observer.Subscriber;
 import tree.implementation.SelectionListener;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 
@@ -101,7 +102,6 @@ public class MainFrame extends JFrame implements Subscriber {
 
     @Override
     public void update(Notification notification) {
-
-
+        jTable.setModel((TableModel) notification.getData());
     }
 }

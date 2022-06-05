@@ -16,6 +16,6 @@ public class RunBtn extends AbstractButtonAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        MainFrame.getInstance().getAppCore().checkAndRunTask(Task.RUN, new RunData(MainFrame.getInstance().getSqlEditor().getText()));
+        MainFrame.getInstance().getAppCore().runTaske(Task.RUN, new RunData(MainFrame.getInstance().getSqlEditor().getText()));
     }
 }

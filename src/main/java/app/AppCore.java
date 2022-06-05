@@ -9,6 +9,7 @@ import database.settings.Settings;
 import database.settings.SettingsImplementation;
 import execute.ExecuteManager;
 import execute.data.Keywords;
+import execute.data.RunData;
 import gui.table.TableModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -72,13 +73,39 @@ public class AppCore extends PublisherImplementation {
     }
 
     public void checkAndRunTask(Task task, Object data){
-        if(!checker.check(task, data))
+        if(!(boolean)checker.check(task, data))
             return;
         executeManager.getExecute(task).execute(data);
+        this.notifySubscribers(new Notification(NotificationCode.DATA_UPDATED, this.getTableModel()));
+    }
+
+    public void execute(String query) {
+        this.database.execute(query);
+        this.notifySubscribers(new Notification(NotificationCode.DATA_UPDATED, this.getTableModel()));
+    }
+
+    public void runTaske(Task type, Object data) {
+        Object o = getChecker().check(type, data);
+        if(o instanceof Boolean) {
+            boolean ok = (Boolean) o;
+            if(!ok) return;
+            System.out.println("Prosao CHECK");
+            executeManager.getExecute(type).execute(data);
+            this.notifySubscribers(new Notification(NotificationCode.DATA_UPDATED, this.getTableModel()));
+            return;
+        }
+        execute(((RunData) data).rawQuery);
+        this.notifySubscribers(new Notification(NotificationCode.DATA_UPDATED, this.getTableModel()));
+    }
+
+    public void runQuery(String query){
+        tableModel.setRows(this.database.selectQuery(query));
+        this.notifySubscribers(new Notification(NotificationCode.DATA_UPDATED, this.getTableModel()));
     }
 
     public void runTask(Task task,Object data){
         executeManager.getExecute(task).execute(data);
+        this.notifySubscribers(new Notification(NotificationCode.DATA_UPDATED, this.getTableModel()));
     }
 
     public boolean existInDatabase(String table, String column)

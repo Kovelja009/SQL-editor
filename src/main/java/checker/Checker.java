@@ -3,6 +3,7 @@ package checker;
 import checker.rules.neon.AbstractRule;
 import checker.rules.neon.RuleFactory;
 import controller.actions.Task;
+import execute.data.RunData;
 import gui.MainFrame;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -49,7 +50,7 @@ public class Checker {
         }
     }
 
-    public boolean check(Task task, Object data){
+    public Object check(Task task, Object data){
         boolean passed = true;
         if(task.equals(Task.IMPORT)){
             passed = bulkCheck.check(data);
@@ -60,6 +61,9 @@ public class Checker {
             passed = runCheck.check(data);
             if(!passed)
                 makeStackTrace(runCheck);
+        }
+        if(passed && ((RunData) data).getOthr(((RunData) data).getQueryText())){
+            return ((RunData) data).rawQuery;
         }
 
         return passed;
