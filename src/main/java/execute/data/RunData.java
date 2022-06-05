@@ -228,7 +228,25 @@ public class RunData {
             tbl = tokens[0];
             att = tokens[1];
         }
-        return MainFrame.getInstance().getAppCore().getDatabase().getAttributeType(tbl, att);
+        return MainFrame.getInstance().getAppCore().getAttributeType(tbl, att);
+    }
+
+    public String refurb(String str){
+        List<String> arr = new ArrayList<>();
+        arr.add("(");
+        arr.add(")");
+        arr.add("=");
+        arr.add("<");
+        arr.add(">");
+        arr.add(" ");
+
+        while(arr.contains(str.substring(0,1)))
+            str = str.substring(1);
+
+        while(arr.contains(str.substring(str.length()-1)))
+            str = str.substring(0, str.length()-1);
+
+        return str;
     }
 
     private AttributeType getAttType(String type){

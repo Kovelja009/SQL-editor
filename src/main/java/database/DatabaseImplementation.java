@@ -30,5 +30,18 @@ public class DatabaseImplementation implements Database{
         return  repository.insert(table,columns,rows);
     }
 
-    public AttributeType getAttributeType(String table, String column){return repository.getAttributeType(table, column);}
+    @Override
+    public boolean isForeignKey(String table, String column, String table2, String column2)
+    {
+        return repository.isForeignKey(table,column,table2,column2);
+    }
+
+    @Override
+    public List<Row> selectQuery(String query) {
+        return this.repository.selectQuery(query);
+    }
+
+    public void execute(String query) {
+        this.repository.execute(query);
+    }
 }

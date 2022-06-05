@@ -45,7 +45,7 @@ public class MainFrame extends JFrame implements Subscriber {
     private void initialise() {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Team_86");
+        setTitle("team_86");
 
         Toolkit kit = Toolkit.getDefaultToolkit();
         Image img = kit.getImage("src/main/java/images/icon_86.png");

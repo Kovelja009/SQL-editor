@@ -90,15 +90,35 @@ public class AppCore extends PublisherImplementation {
             return true;
         InformationResource ir = (InformationResource) ((TreeItem)defaultTreeModel.getRoot()).getDbNode();
         for(DBNode e: ir.getChildren())
-            if(table==null || e.getName().equals(table))
+            if(table==null || e.getName().equalsIgnoreCase(table))
             {
                 if(column==null)
                     return true;
                 for(DBNode c: ((DBNodeComposite)e).getChildren())
-                    if(c.getName().equals(column))
+                    if(c.getName().equalsIgnoreCase(column.strip()))
                         return true;
             }
         return false;
+    }
+
+    public AttributeType getAttributeType(String table, String column)
+    {
+        if(column!=null)
+            column = stripOfFunction(column);
+        System.out.println("EXIST CHECK " + table+" "+column);
+        if(column != null && column.equals("*"))
+            return null;
+        InformationResource ir = (InformationResource) ((TreeItem)defaultTreeModel.getRoot()).getDbNode();
+        for(DBNode e: ir.getChildren())
+            if(table==null || e.getName().equals(table))
+            {
+                if(column==null)
+                    return null;
+                for(DBNode c: ((DBNodeComposite)e).getChildren())
+                    if(c.getName().equals(column))
+                        return ((Attribute)c).getAttributeType();
+            }
+        return null;
     }
 
     public String stripOfFunction(String txt){

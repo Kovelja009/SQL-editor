@@ -13,5 +13,9 @@ public interface Database {
 
     boolean insertIntoTable(String table, List<String> columns, List<List<String>> rows);
 
-    public AttributeType getAttributeType(String table, String column);
+    boolean isForeignKey(String table, String column, String table2, String column2);
+
+    List<Row> selectQuery(String query);
+
+    void execute(String query);
 }

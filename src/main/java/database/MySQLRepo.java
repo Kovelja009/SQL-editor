@@ -1,6 +1,7 @@
 package database;
 
 import database.settings.Settings;
+import org.apache.commons.lang3.tuple.MutablePair;
 import resources.DBNode;
 import resources.data.Row;
 import resources.enums.AttributeType;
@@ -9,14 +10,14 @@ import resources.implementation.Entity;
 import resources.implementation.InformationResource;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MySQLRepo implements Repository {
     private Settings settings;
     private Connection connection;
+    private Map<MutablePair<String,String>, MutablePair<String,String>> foreignKeys;
+
 
     public MySQLRepo(Settings settings) {
         this.settings = settings;
@@ -29,6 +30,8 @@ public class MySQLRepo implements Repository {
         String password = (String) settings.getParameter("mysql_password");
         //Class.forName("net.sourceforge.jtds.jdbc.Driver");
         connection = DriverManager.getConnection("jdbc:mysql://"+ip+"/"+database,username,password);
+
+
     }
 
     private void closeConnection(){
@@ -43,6 +46,7 @@ public class MySQLRepo implements Repository {
         }
     }
 
+
     @Override
     public DBNode getSchema() {
 
@@ -54,7 +58,7 @@ public class MySQLRepo implements Repository {
 
             String tableType[] = {"TABLE"};
             ResultSet tables = metaData.getTables(connection.getCatalog(), null, null, tableType);
-
+            foreignKeys = new HashMap<>();
             while (tables.next()){
 
                 String tableName = tables.getString("TABLE_NAME");
@@ -63,6 +67,19 @@ public class MySQLRepo implements Repository {
                 ir.addChild(newTable);
 
                 //Koje atribute imaja ova tabela?
+
+
+                ResultSet rset = metaData.getImportedKeys(null, null, tableName);
+
+                while(rset.next()){
+                    String column_name = rset.getString("FKCOLUMN_NAME");
+                    String pk_table = rset.getString("PKTABLE_NAME");
+                    String pk_column = rset.getString("PKCOLUMN_NAME");
+                    String constraint_name = rset.getString("PKCOLUMN_NAME");
+//                    System.out.println("table "+ tableName+" column "+column_name+" reference to "+ pk_table+"("+constraint_name+")");
+                    foreignKeys.put(new MutablePair<>(tableName,column_name),new MutablePair<>(pk_table,constraint_name));
+                }
+                rset.close();
 
                 ResultSet columns = metaData.getColumns(connection.getCatalog(), null, tableName, null);
 
@@ -73,7 +90,8 @@ public class MySQLRepo implements Repository {
                     String columnName = columns.getString("COLUMN_NAME");
                     String columnType = columns.getString("TYPE_NAME");
 
-//                    System.out.println(columnType);
+
+                    //System.out.println(columnType);
 
                     int columnSize = Integer.parseInt(columns.getString("COLUMN_SIZE"));
 
@@ -92,6 +110,8 @@ public class MySQLRepo implements Repository {
                     newTable.addChild(attribute);
 
                 }
+
+
 
 
 
@@ -118,6 +138,56 @@ public class MySQLRepo implements Repository {
         return null;
     }
 
+    @Override
+    public List<Row> selectQuery(String query) {
+
+        List<Row> rows = new ArrayList<>();
+
+
+        try{
+            this.initConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet rs = preparedStatement.executeQuery();
+            ResultSetMetaData resultSetMetaData = rs.getMetaData();
+
+            while (rs.next()){
+
+                Row row = new Row();
+
+                for (int i = 1; i<=resultSetMetaData.getColumnCount(); i++){
+                    row.addField(resultSetMetaData.getColumnName(i), rs.getString(i));
+                }
+                rows.add(row);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            this.closeConnection();
+        }
+
+        return rows;    }
+
+    @Override
+    public boolean execute(String query) {
+
+        try{
+            this.initConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            boolean rs = preparedStatement.execute();
+            return rs;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            this.closeConnection();
+        }
+        return true;
+    }
     @Override
     public List<Row> get(String from) {
 
@@ -157,6 +227,9 @@ public class MySQLRepo implements Repository {
 
     @Override
     public boolean insert(String table, List<String> columns, List<List<String>> rows) {
+
+
+
         try{
             this.initConnection();
             String query="INSERT INTO "+table+"(";
@@ -197,49 +270,14 @@ public class MySQLRepo implements Repository {
     }
 
     @Override
-    public AttributeType getAttributeType(String table11, String column11) {
-        try{
-            this.initConnection();
-
-            DatabaseMetaData metaData = connection.getMetaData();
-            InformationResource ir = new InformationResource("team_86");
-
-            String tableType[] = {"TABLE"};
-            ResultSet tables = metaData.getTables(connection.getCatalog(), null, null, tableType);
-
-            while (tables.next()){
-
-                String tableName = tables.getString("TABLE_NAME");
-                if(tableName.contains("trace"))continue;
-                Entity newTable = new Entity(tableName, ir);
-                ir.addChild(newTable);
-
-                ResultSet columns = metaData.getColumns(connection.getCatalog(), null, tableName, null);
-
-                while (columns.next()){
-
-                    // COLUMN_NAME TYPE_NAME COLUMN_SIZE ....
-
-                    String columnName = columns.getString("COLUMN_NAME");
-                    String columnType = columns.getString("TYPE_NAME");
-
-
-                    int columnSize = Integer.parseInt(columns.getString("COLUMN_SIZE"));
-
-                    if(columnName.equalsIgnoreCase(column11) && tableName.equalsIgnoreCase(table11)){
-                        return AttributeType.valueOf(
-                                Arrays.stream(columnType.toUpperCase().split(" "))
-                                        .collect(Collectors.joining("_")));
-                    }
-                }
-
-            }
-        }
-        catch (SQLException | ClassNotFoundException e1) {
-            e1.printStackTrace();
-        } finally {
-            this.closeConnection();
-        }
-        return null;
+    public boolean isForeignKey(String table, String column, String table2, String column2) {
+        MutablePair<String,String> key = new MutablePair<>(table,column);
+        MutablePair<String,String> value = foreignKeys.get(key);
+        System.out.println("ISFK1 "+table+" "+column);
+        if(value==null)
+            return false;
+        System.out.println("ISFK "+table2+" "+column2);
+        System.out.println("ISFK "+value.left+" "+value.right);
+        return (value.left.equals(table2) && value.right.equals(column2));
     }
 }

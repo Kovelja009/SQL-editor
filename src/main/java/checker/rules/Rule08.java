@@ -152,7 +152,7 @@ public class Rule08 extends AbstractRule {
         if(tokens.length == 1){
             return MainFrame.getInstance().getAppCore().attributeType(tokens[0]);
         }
-        return MainFrame.getInstance().getAppCore().getDatabase().getAttributeType(tbl, att);
+        return MainFrame.getInstance().getAppCore().getAttributeType(tbl, att);
     }
 
     @Override

@@ -6,8 +6,8 @@
     },
     {
       "name": "rule02",
-      "error": "2 error",
-      "suggestion": "2 suggestion"
+      "error": "Column %s from table %s isn`t foreign key column %s from table %s",
+      "suggestion": "Change table %s into foreign key"
     },
     {
       "name": "rule04",
