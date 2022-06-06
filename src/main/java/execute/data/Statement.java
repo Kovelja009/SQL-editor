@@ -10,9 +10,10 @@ public class Statement {
     private String keyword;
     private String text;
     private int priority;
+    private boolean hasSubquery;
 
     @Override
     public String toString() {
-        return "keyword: " + keyword + " text: " + text + " priority: " + priority;
+        return "keyword: " + keyword + " text: " + text + " priority: " + priority + " hasSubquery: " + hasSubquery;
     }
 }

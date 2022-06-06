@@ -24,6 +24,8 @@ public class Rule02 extends AbstractRule {
         String lastTable="";
 
         for(Statement statement : runData.getStatementList()){
+            if(statement.isHasSubquery())
+                continue;
             if(statement.getKeyword().equalsIgnoreCase("from") && !statement.getText().toLowerCase().contains(" join ")){
                 MutablePair<String,String> pair = runData.getFromArguments(statement.getText());
                 if(pair.right!=null)

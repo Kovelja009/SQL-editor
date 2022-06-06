@@ -14,6 +14,9 @@ import java.util.Map;
 
 // column exist?
 public class Rule01 extends AbstractRule {
+    Map<String,String> aliasTable = new HashMap<>();
+
+
     @Override
     public boolean checkRule(Object data) {
         RunData runData = (RunData) data;
@@ -21,15 +24,21 @@ public class Rule01 extends AbstractRule {
         if(runData.isProcedure())
             return true;
 
-        Map<String,String> aliasTable = new HashMap<>();
 
         for(Statement stat : runData.getStatementList()){
             if(stat.getKeyword().equalsIgnoreCase("from") && !stat.getText().toLowerCase().contains(" join ")){
-
+                System.out.println("Stateee: " + stat.getText());
                MutablePair<String,String> pair = runData.getFromArguments(stat.getText());
-                    if(pair.right!=null)
-                        aliasTable.put(pair.right,pair.left);
+                    if(pair.right!=null){
+                        if(stat.isHasSubquery())
+                            aliasTable.put(pair.right, "subquery");
+                        else
+                            aliasTable.put(pair.right,pair.left);
+                    }
             }
+            if(stat.isHasSubquery())
+                continue;
+
             if(stat.getKeyword().equalsIgnoreCase("from") && stat.getText().toLowerCase().contains(" join ")){
                 String str = runData.trimToJoin(stat.getText());
                 MutablePair<String,String> pair = runData.getFromArguments(str);
@@ -48,7 +57,12 @@ public class Rule01 extends AbstractRule {
             }
         }
 
+        System.out.println(aliasTable);
+
         for(Statement stat : runData.getStatementList()){
+            if(stat.isHasSubquery())
+                continue;
+
             if(stat.getKeyword().equalsIgnoreCase("select")){
                 for (MutablePair<String, String> pair : runData.getSelectArguments(stat.getText())){
                     if (pair.left.equals("*") && runData.getSelectArguments(stat.getText()).size() == 1)
@@ -59,6 +73,8 @@ public class Rule01 extends AbstractRule {
                         String column = pair.left.substring(ind + 1);
                         if (aliasTable.containsKey(table))
                             table = aliasTable.get(table);
+                        if(table.charAt(0) == '(' && table.charAt(table.length() - 1) == ')')
+                            continue;
                         if (!exist(table, null)) {
                             generateErrorSuggestion(table);
                             System.out.println("Usao 1");
@@ -81,9 +97,11 @@ public class Rule01 extends AbstractRule {
 
             if(stat.getKeyword().equalsIgnoreCase("from") && !stat.getText().toLowerCase().contains(" join ")){
                 MutablePair<String,String> pair = runData.getFromArguments(stat.getText());
+                if(pair.left.charAt(0) == '(' && pair.left.charAt(pair.left.length()-1) == ')')
+                    continue;
                 if(!exist(pair.left,null)){
                     generateErrorSuggestion(pair.left);
-                    System.out.println("Usao 4");
+                    System.out.println("Usao 4 i bio je zahtev");
                     return false;
                 }
             }
@@ -152,6 +170,13 @@ public class Rule01 extends AbstractRule {
 
 
     boolean exist(String table, String column){
+        if((aliasTable.get(table) != null && aliasTable.get(table).equalsIgnoreCase("subquery"))
+                || (aliasTable.get(column) != null && aliasTable.get(column).equalsIgnoreCase("subquery")))
+            return true;
+        if((table != null && table.equalsIgnoreCase("subquery")) ||
+                (column != null && column.equalsIgnoreCase("subquery")))
+            return true;
+        System.out.println("");
         return  MainFrame.getInstance().getAppCore().existInDatabase(table,column);
     }
 

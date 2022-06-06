@@ -20,6 +20,8 @@ public class Rule05 extends AbstractRule {
             return true;
 
         for(Statement stat : runData.getStatementList()){
+            if(stat.isHasSubquery())
+                continue;
             if(stat.getKeyword().equalsIgnoreCase("select")){
                 String wrongAlias = wrongAlias(runData.getSelectArguments(stat.getText()));
                 if(!wrongAlias.equals("")){

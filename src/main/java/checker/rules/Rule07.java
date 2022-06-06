@@ -17,6 +17,8 @@ public class Rule07 extends AbstractRule {
 
         String txt = "";
         for(Statement statement : runData.getStatementList()){
+            if(statement.isHasSubquery())
+                continue;
             if(statement.getKeyword().equalsIgnoreCase("where")){
                 txt = statement.getText();
             }

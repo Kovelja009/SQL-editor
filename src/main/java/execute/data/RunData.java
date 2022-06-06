@@ -1,5 +1,6 @@
 package execute.data;
 
+import controller.actions.Task;
 import gui.MainFrame;
 import lombok.Getter;
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -43,8 +44,8 @@ public class RunData {
                 System.out.println("key: " + entry.getKey() + " values: " + entry.getValue());
         }
 
-        for(Statement statement : statementList)
-            System.out.println(statement);
+//        for(Statement statement : statementList)
+//            System.out.println(statement);
 
     }
 
@@ -65,7 +66,14 @@ public class RunData {
                     String subtext = "";
                     if(!(start + keyword.length() + 1 > i-1))
                         subtext = queryText.substring(start + keyword.length() + 1, i-1);
-                    Statement statement = new Statement(keyword, subtext, Keywords.getInstance().getPriority(keyword));
+                    Statement statement;
+
+                    if(checkSubtextSubquery(subtext)){   // subtext.charAt(0) == '(' && subtext.charAt(subtext.length()-1) == ')'
+                        statement = new Statement(keyword, subtext, Keywords.getInstance().getPriority(keyword), true);
+                        System.out.println("Usao u subquery");
+                        MainFrame.getInstance().getAppCore().getChecker().check(Task.RUN, new RunData(getSubquery(subtext)));
+                    } else
+                        statement = new Statement(keyword, subtext, Keywords.getInstance().getPriority(keyword), false);
                     statementList.add(statement);
                 }
                 start = i;
@@ -79,12 +87,19 @@ public class RunData {
             String subtext = "";
             if((start + keyword.length() + 1 < queryText.length()))
                 subtext = queryText.substring(start + keyword.length() + 1);
-            Statement statement = new Statement(keyword, subtext, Keywords.getInstance().getPriority(keyword));
+
+            Statement statement;
+            if(checkSubtextSubquery(subtext)){   //subtext.charAt(0) == '(' && subtext.charAt(subtext.length()-1) == ')'
+                statement = new Statement(keyword, subtext, Keywords.getInstance().getPriority(keyword), true);
+                System.out.println("Usao u subquery");
+                MainFrame.getInstance().getAppCore().getChecker().check(Task.RUN, new RunData(getSubquery(subtext)));
+            } else
+                statement = new Statement(keyword, subtext, Keywords.getInstance().getPriority(keyword), false);
             statementList.add(statement);
         }
 
-//        for(Statement statement : statementList)
-//            System.out.println(statement);
+        for(Statement statement : statementList)
+            System.out.println(statement);
     }
 
     private String trimming(String queryText){
@@ -187,6 +202,26 @@ public class RunData {
 
         System.out.println("////////////////////////////");
 
+    }
+
+    boolean checkSubtextSubquery(String txt){
+        int start = txt.indexOf('(');
+        int end = txt.indexOf(')');
+
+        if(start == -1 || end == -1)
+            return false;
+        for(Map.Entry<Integer, String> entry : Keywords.getInstance().getKeywords().entrySet()){
+            if(txt.substring(start, end).contains(entry.getValue()))
+                return true;
+        }
+        return false;
+    }
+
+    String getSubquery(String txt){
+        int start = txt.indexOf('(');
+        int end = txt.indexOf(')');
+
+        return txt.substring(start+1, end);
     }
 
     private void parseDeclare(String text){
