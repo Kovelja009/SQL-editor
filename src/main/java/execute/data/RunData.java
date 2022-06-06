@@ -457,7 +457,7 @@ public class RunData {
     public String stripOfFunction(String txt){
 
         for(String fun : Keywords.getInstance().getAggregateFunctions()){
-            if(txt.indexOf(fun) == 0){
+            if(txt.indexOf(fun) == 0 && txt.charAt(txt.indexOf(fun) + fun.length()) == '('){
                 int start = txt.indexOf("(") + 1;
                 int end = txt.indexOf(")");
                 return txt.substring(start,end);

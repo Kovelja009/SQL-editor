@@ -51,6 +51,7 @@ public class Keywords {
         aggregateFunctions.add("avg");
         aggregateFunctions.add("count");
         aggregateFunctions.add("sum");
+        aggregateFunctions.add("upper");
 
 
         keyWords = new ArrayList<>();

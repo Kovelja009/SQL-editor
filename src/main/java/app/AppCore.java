@@ -28,6 +28,7 @@ import utils.Constants;
 
 
 import javax.swing.tree.DefaultTreeModel;
+import java.util.List;
 
 @Getter
 @Setter
@@ -108,14 +109,17 @@ public class AppCore extends PublisherImplementation {
         this.notifySubscribers(new Notification(NotificationCode.DATA_UPDATED, this.getTableModel()));
     }
 
-    public boolean existInDatabase(String table, String column)
+    public boolean existInDatabase(String table, String column, List<String> tablesForCheck)
     {
         if(column!=null)
             column = stripOfFunction(column);
         System.out.println("EXIST CHECK " + table+" "+column);
         if(column != null && column.equals("*"))
             return true;
+
+
         InformationResource ir = (InformationResource) ((TreeItem)defaultTreeModel.getRoot()).getDbNode();
+
         for(DBNode e: ir.getChildren())
             if(table==null || e.getName().equalsIgnoreCase(table))
             {
@@ -125,6 +129,21 @@ public class AppCore extends PublisherImplementation {
                     if(c.getName().equalsIgnoreCase(column.strip()))
                         return true;
             }
+        if(table == null){
+            boolean contains = false;
+            for(String tblcheck : tablesForCheck){
+                for(DBNode e: ir.getChildren()){
+                    if(e.getName().equalsIgnoreCase(tblcheck)){
+                        for(DBNode c: ((DBNodeComposite)e).getChildren()){
+                            if(c.getName().equalsIgnoreCase(column))
+                                return true;
+                        }
+
+                    }
+                }
+            }
+
+        }
         return false;
     }
 
@@ -151,7 +170,7 @@ public class AppCore extends PublisherImplementation {
     public String stripOfFunction(String txt){
 
         for(String fun : Keywords.getInstance().getAggregateFunctions()){
-            if(txt.indexOf(fun) == 0){
+            if(txt.indexOf(fun) == 0 && txt.charAt(txt.indexOf(fun) + fun.length()) == '('){
                 int start = txt.indexOf("(") + 1;
                 int end = txt.indexOf(")");
                 return txt.substring(start,end);
