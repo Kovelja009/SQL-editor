@@ -31,7 +31,7 @@ public class Rule01 extends AbstractRule {
                         aliasTable.put(pair.right,pair.left);
             }
             if(stat.getKeyword().equalsIgnoreCase("from") && stat.getText().toLowerCase().contains(" join ")){
-                String str = trimToJoin(stat.getText());
+                String str = runData.trimToJoin(stat.getText());
                 MutablePair<String,String> pair = runData.getFromArguments(str);
                 if(pair.right!=null)
                     aliasTable.put(pair.right,pair.left);
@@ -89,7 +89,7 @@ public class Rule01 extends AbstractRule {
             }
 
             if(stat.getKeyword().equalsIgnoreCase("from") && stat.getText().toLowerCase().contains(" join ")){
-                String str = trimToJoin(stat.getText());
+                String str = runData.trimToJoin(stat.getText());
                 MutablePair<String,String> pair = runData.getFromArguments(str);
                 if(!exist(pair.left,null)){
                     generateErrorSuggestion(pair.left);
@@ -155,27 +155,7 @@ public class Rule01 extends AbstractRule {
         return  MainFrame.getInstance().getAppCore().existInDatabase(table,column);
     }
 
-    private String trimToJoin(String text){
-        int full = text.toLowerCase().indexOf(" full ");
-        int left = text.toLowerCase().indexOf(" left ");
-        int right = text.toLowerCase().indexOf(" right ");
-        int outer = text.toLowerCase().indexOf(" outer ");
-        int inner = text.toLowerCase().indexOf(" innner ");
 
-
-        if(full != -1)
-            return text.substring(0, full).strip();
-        if(left != -1)
-            return text.substring(0, left).strip();
-        if(right != -1)
-            return text.substring(0, right).strip();
-        if(outer != -1)
-            return text.substring(0, outer).strip();
-        if(inner != -1)
-            return text.substring(0, inner).strip();
-
-        return text.substring(0, text.indexOf(" join ")).strip();
-    }
 
     @Override
     public void generateErrorSuggestion(Object data) {

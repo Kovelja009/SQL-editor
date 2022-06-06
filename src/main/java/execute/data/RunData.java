@@ -431,6 +431,28 @@ public class RunData {
         return txt;
     }
 
+    public String trimToJoin(String text){
+        int full = text.toLowerCase().indexOf(" full ");
+        int left = text.toLowerCase().indexOf(" left ");
+        int right = text.toLowerCase().indexOf(" right ");
+        int outer = text.toLowerCase().indexOf(" outer ");
+        int inner = text.toLowerCase().indexOf(" innner ");
+
+
+        if(full != -1)
+            return text.substring(0, full).strip();
+        if(left != -1)
+            return text.substring(0, left).strip();
+        if(right != -1)
+            return text.substring(0, right).strip();
+        if(outer != -1)
+            return text.substring(0, outer).strip();
+        if(inner != -1)
+            return text.substring(0, inner).strip();
+
+        return text.substring(0, text.indexOf(" join ")).strip();
+    }
+
 
     //    private void buildAliasMapKeys(String text, boolean isSelect){
 //        if(!isSelect){

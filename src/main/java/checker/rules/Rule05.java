@@ -37,8 +37,8 @@ public class Rule05 extends AbstractRule {
                 }
             }
             if(stat.getKeyword().equalsIgnoreCase("from") && stat.getText().toLowerCase().contains(" join ")){
-
-                String arg = runData.getAli(stat.getText().substring(0, stat.getText().toLowerCase().indexOf(" join ")).strip());
+                String str = runData.trimToJoin(stat.getText());
+                String arg = runData.getAli(str);  //stat.getText().substring(0, stat.getText().toLowerCase().indexOf(" join ")).strip()
 
                 if(!arg.equals("") && !checkinAli(arg).equals("")){
                     generateErrorSuggestion(arg);
