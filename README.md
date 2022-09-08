@@ -1,4 +1,4 @@
-As the name implies this app serves as the SQL-editor trough which user can communicate with remote datebase. Before sending query to datebase it first runs trough checker, which looks for syntax and semantic type of errors, and only after it passes checker query is sent to database. Arcitecture use for this project is MVC + using observer for GUI updates and bridge pattern to communicate with database.
+As the name implies this app serves as the SQL-editor trough which user can communicate with remote database. Before sending query to database it first runs trough checker, which looks for syntax and semantic type of errors, and only after it passes checker query is sent to database. Arcitecture use for this project is MVC + using observer for GUI updates and bridge pattern to communicate with database.
 
 Other functionalities:
 - bulk import: importing data from csv into database
